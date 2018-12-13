@@ -68,7 +68,7 @@ Docker镜像：
 
 YayCrawler  爬虫技术交流  559745472 
 
-install jar :  https://git.oschina.net/shentong_012
+install jar :  https://gitee.com/shentong_012/G-Crawler.release
 
 ![输入图片说明](http://git.oschina.net/uploads/images/2016/1012/110209_e7df5de8_302008.png "在这里输入图片标题")
 
