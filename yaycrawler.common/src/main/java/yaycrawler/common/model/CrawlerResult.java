@@ -15,7 +15,7 @@ public class CrawlerResult {
     public CrawlerResult() {
     }
 
-    public CrawlerResult(boolean isSuccess, String key, List<CrawlerRequest> crawlerRequestList,String message) {
+    public CrawlerResult(boolean isSuccess, String key, List<CrawlerRequest> crawlerRequestList, String message) {
         this.isSuccess = isSuccess;
         this.key = key;
         this.crawlerRequestList = crawlerRequestList;

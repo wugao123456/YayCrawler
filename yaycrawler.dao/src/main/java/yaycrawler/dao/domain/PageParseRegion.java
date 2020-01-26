@@ -19,35 +19,35 @@ public class PageParseRegion implements Serializable {
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid")
     private String id;
-    @Column(name = "pageId",nullable = false,columnDefinition = "varchar(38)")
+    @Column(name = "pageId", nullable = false, columnDefinition = "varchar(38)")
     private String pageId;
 //    @NotNull
 //    @Column(name = "pageUrl")
 
-    @Column(name = "name",nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
-    @Column(name = "dataType",nullable = false,columnDefinition = "varchar(38) default 'MAP'")
+    @Column(name = "dataType", nullable = false, columnDefinition = "varchar(38) default 'MAP'")
     private String dataType;
 
     /**
      * 区域选择表达式
      */
-    @Column(name = "selectExpression",columnDefinition = "varchar(100)")
+    @Column(name = "selectExpression", columnDefinition = "varchar(100)")
     private String selectExpression;
-    @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "regionId", insertable = false, updatable = false)
     private Set<FieldParseRule> fieldParseRules;
 
-    @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "regionId", insertable = false, updatable = false)
     @OrderBy(value = "id ASC")
     private Set<UrlParseRule> urlParseRules;
-    @Column(name = "createdDate",columnDefinition = "timestamp default now()")
+    @Column(name = "createdDate", columnDefinition = "timestamp default now()")
     private Date createdDate;
 
     public PageParseRegion() {
-        fieldParseRules =new HashSet<>();
-        urlParseRules =new HashSet<>();
+        fieldParseRules = new HashSet<>();
+        urlParseRules = new HashSet<>();
     }
 
     public String getId() {

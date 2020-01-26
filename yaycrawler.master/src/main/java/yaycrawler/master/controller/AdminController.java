@@ -26,47 +26,41 @@ public class AdminController {
 
     @RequestMapping("/registerQueues")
     @ResponseBody
-    public RestFulResult acceptAdminTask(@RequestBody List<CrawlerRequest> crawlerRequests)
-    {
-        Boolean flag = crawlerQueueService.pushTasksToWaitingQueue(crawlerRequests,true);
-        if(flag)
+    public RestFulResult acceptAdminTask(@RequestBody List<CrawlerRequest> crawlerRequests) {
+        Boolean flag = crawlerQueueService.pushTasksToWaitingQueue(crawlerRequests, true);
+        if (flag)
             return RestFulResult.success(flag);
         else
             return RestFulResult.failure(flag.toString());
     }
 
-    @RequestMapping(value = "/retrievedWorkerRegistrations",method = RequestMethod.POST)
+    @RequestMapping(value = "/retrievedWorkerRegistrations", method = RequestMethod.POST)
     @ResponseBody
-    public Object retrievedWorkerRegistrations()
-    {
+    public Object retrievedWorkerRegistrations() {
         return RestFulResult.success(MasterContext.workerRegistrationMap.values());
     }
 
-    @RequestMapping(value = "/retrievedSuccessQueueRegistrations",method = RequestMethod.POST)
+    @RequestMapping(value = "/retrievedSuccessQueueRegistrations", method = RequestMethod.POST)
     @ResponseBody
-    public RestFulResult retrievedSuccessQueueRegistrations(@RequestBody QueueQueryParam queryParam)
-    {
+    public RestFulResult retrievedSuccessQueueRegistrations(@RequestBody QueueQueryParam queryParam) {
         return RestFulResult.success(crawlerQueueService.querySuccessQueues(queryParam));
     }
 
-    @RequestMapping(value = "/retrievedFailQueueRegistrations",method = RequestMethod.POST)
+    @RequestMapping(value = "/retrievedFailQueueRegistrations", method = RequestMethod.POST)
     @ResponseBody
-    public RestFulResult retrievedFailQueueRegistrations(@RequestBody QueueQueryParam queryParam)
-    {
+    public RestFulResult retrievedFailQueueRegistrations(@RequestBody QueueQueryParam queryParam) {
         return RestFulResult.success(crawlerQueueService.queryFailQueues(queryParam));
     }
 
-    @RequestMapping(value = "/retrievedRunningQueueRegistrations",method = RequestMethod.POST)
+    @RequestMapping(value = "/retrievedRunningQueueRegistrations", method = RequestMethod.POST)
     @ResponseBody
-    public RestFulResult retrievedRunningQueueRegistrations(@RequestBody QueueQueryParam queryParam)
-    {
+    public RestFulResult retrievedRunningQueueRegistrations(@RequestBody QueueQueryParam queryParam) {
         return RestFulResult.success(crawlerQueueService.queryRunningQueues(queryParam));
     }
 
-    @RequestMapping(value = "/retrievedWaitingQueueRegistrations",method = RequestMethod.POST)
+    @RequestMapping(value = "/retrievedWaitingQueueRegistrations", method = RequestMethod.POST)
     @ResponseBody
-    public RestFulResult retrievedWaitingQueueRegistrations(@RequestBody QueueQueryParam queryParam)
-    {
+    public RestFulResult retrievedWaitingQueueRegistrations(@RequestBody QueueQueryParam queryParam) {
         return RestFulResult.success(crawlerQueueService.queryWaitingQueues(queryParam));
     }
 

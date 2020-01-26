@@ -34,7 +34,9 @@ var utils = require('utils');
 /*
  * Building an Array subclass
  */
-function responseHeaders(){}
+function responseHeaders() {
+}
+
 responseHeaders.prototype = [];
 
 /**
@@ -43,12 +45,12 @@ responseHeaders.prototype = [];
  * @param   String  name    A case-insensitive response header name
  * @return  mixed   A header string or `null` if not found
  */
-responseHeaders.prototype.get = function get(name){
+responseHeaders.prototype.get = function get(name) {
     "use strict";
     var headerValue = null;
     name = name.toLowerCase();
-    this.some(function(header){
-        if (header.name.toLowerCase() === name){
+    this.some(function (header) {
+        if (header.name.toLowerCase() === name) {
             headerValue = header.value;
             return true;
         }
@@ -62,7 +64,7 @@ responseHeaders.prototype.get = function get(name){
  * @param  Mixed  response  Phantom response or undefined (generally with local files)
  * @return Object           Augmented response
  */
-exports.augmentResponse = function(response) {
+exports.augmentResponse = function (response) {
     "use strict";
     if (!utils.isHTTPResource(response)) {
         return;

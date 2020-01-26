@@ -30,6 +30,7 @@ public class CaptchaController {
 
     /**
      * 解析验证码的位置，并返回移动轨迹数组
+     *
      * @param response
      * @param params
      * @return
@@ -39,7 +40,7 @@ public class CaptchaController {
         response.addHeader("Access-Control-Allow-Origin", "*");
         Map<String, Object> paramMap = (Map<String, Object>) JSON.parseObject(params, Map.class);
         if (paramMap == null)
-          return RestFulResult.failure("参数不能为空！");
+            return RestFulResult.failure("参数不能为空！");
         List<String> fullbgSrcList = (List<String>) paramMap.get("fullbgSrcArray");
         List<String> fullbgPositionList = (List<String>) paramMap.get("fullbgPositionArray");
         List<String> bgSrcList = (List<String>) paramMap.get("bgSrcArray");
@@ -64,7 +65,7 @@ public class CaptchaController {
             boolean mflag = true;
             if (!file.exists() && !file.isDirectory())
                 mflag = file.mkdir();
-            if(!mflag)
+            if (!mflag)
                 return null;
             String identification = String.valueOf(System.currentTimeMillis());
             String imageSubfix = "jpg";
@@ -82,13 +83,13 @@ public class CaptchaController {
             if (ImageUtils.combineImages(fullbgSrcList, fullbgPointList, lineItemCount, itemWidth, itemHeight, fullbgImagePath, imageSubfix)
                     && ImageUtils.combineImages(bgSrcList, bgPointList, lineItemCount, itemWidth, itemHeight, bgImagePath, imageSubfix)) {
                 int deltaX = ImageUtils.findXDiffRectangeOfTwoImage(fullbgImagePath, bgImagePath);
-                deltaX-=7;
+                deltaX -= 7;
                 //删除缓存的图片
 //                deleteImage(fullbgImagePath);
 //                deleteImage(bgImagePath);
 
-                GeetestTrail geetestTrail=geetestTrailRepository.findOneByDeltaX(deltaX);
-                if(geetestTrail==null) return RestFulResult.failure("没有匹配到位移为"+deltaX+"的轨迹");
+                GeetestTrail geetestTrail = geetestTrailRepository.findOneByDeltaX(deltaX);
+                if (geetestTrail == null) return RestFulResult.failure("没有匹配到位移为" + deltaX + "的轨迹");
                 Map<String, Object> resultMap = new HashedMap();
                 resultMap.put("trailId", geetestTrail.getId());
                 resultMap.put("deltaX", deltaX);

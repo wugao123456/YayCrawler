@@ -40,7 +40,7 @@ public class DataRepositoryAspect {
         Integer maxVersionNo = versionRepository.getMaxVersionNo();
         Cache ruleDataCache = cacheService.getOrCreateMemoryCache(RULE_CACHE_NAME);
         Integer cacheVersion = ruleDataCache.get(VERSION, Integer.class);
-        if(cacheVersion==null||cacheVersion<maxVersionNo){
+        if (cacheVersion == null || cacheVersion < maxVersionNo) {
 
         }
 

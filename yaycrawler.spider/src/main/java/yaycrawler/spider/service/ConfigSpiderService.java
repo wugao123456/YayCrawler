@@ -70,11 +70,11 @@ public class ConfigSpiderService {
 
     public Object testExpressionOnPage(PageInfo pageInfo, String expression) {
         if (StringUtils.isBlank(expression)) return null;
-        if (pageInfo == null ) return null;
+        if (pageInfo == null) return null;
         String targetUrl = pageInfo.getPageUrl();
         Map<String, Object> paramsMap = pageInfo.getParamsMap();
         Request request = RequestHelper.createRequest(targetUrl, pageInfo.getMethod(), paramsMap);
-        request.putExtra("$pageInfo",pageInfo);
+        request.putExtra("$pageInfo", pageInfo);
         Page page = downloadPage(request, null);
         if (page == null) return RestFulResult.failure("页面下载失败！");
         pageProcessor.process(page);

@@ -3,6 +3,7 @@ package yaycrawler.common.utils;
 /**
  * Created by bill on 2017/5/3.
  */
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -10,6 +11,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.RandomAccessFile;
+
 import org.apache.commons.net.PrintCommandListener;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
@@ -18,6 +20,7 @@ import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
 import org.apache.commons.net.io.CopyStreamEvent;
 import org.apache.commons.net.io.CopyStreamListener;
+
 /**
  * FTP进行文件上传和下载；
  * 支持断点续传；
@@ -40,9 +43,7 @@ public final class FTPUtils {
     }
 
     /**
-     *
-     * @param hostname
-     *            如：IP
+     * @param hostname 如：IP
      * @param port
      * @param username
      * @param password
@@ -97,8 +98,8 @@ public final class FTPUtils {
             }
         }
     }
+
     /**
-     *
      * @param absSrcFileName
      * @param destDir
      * @param destFileName
@@ -109,7 +110,7 @@ public final class FTPUtils {
         // 创建并转到工作目录
 //        String absDstDir = this.ftp.printWorkingDirectory() + "/" + destDir;
 //        absDstDir = absDstDir.replaceAll("//", "/");
-        makeDirectory(ftp,destDir);
+        makeDirectory(ftp, destDir);
         System.out.println("q************" + ftp.printWorkingDirectory() + "*******");
         ftp.changeWorkingDirectory(destDir);
         System.out.println("h************" + ftp.printWorkingDirectory() + "*******");
@@ -132,7 +133,7 @@ public final class FTPUtils {
             if (!b) {// 如果断点续传没有成功，则删除服务器上文件，重新上传
                 if (this.ftp.deleteFile(destFileName)) {
                     uploadFile(destFileName, srcFile, this.ftp, 0);
-                }else {
+                } else {
                     System.err.println("Delete file fail.");
                 }
             }
@@ -142,7 +143,6 @@ public final class FTPUtils {
     }
 
     /**
-     *
      * @param remoteFileName
      * @param localFileName
      * @throws IOException
@@ -201,21 +201,20 @@ public final class FTPUtils {
         }
     }
 
-    private static void makeDirectory(FTPClient ftpClient,String path) throws IOException {
+    private static void makeDirectory(FTPClient ftpClient, String path) throws IOException {
         String[] dsts = path.split("/");
         StringBuffer temp = new StringBuffer();
-        for (String dst:dsts) {
+        for (String dst : dsts) {
             temp.append("/").append(dst);
             ftpClient.makeDirectory(temp.toString());
         }
     }
 
     /**
-     *
      * @param destFileName
      * @param srcFile
      * @param ftpClient
-     * @param dstFileSize 文件写入的起始位置； >0:表示断点续传，<=0:表示上传新文件
+     * @param dstFileSize  文件写入的起始位置； >0:表示断点续传，<=0:表示上传新文件
      * @return
      * @throws IOException
      */
@@ -256,13 +255,12 @@ public final class FTPUtils {
         }
         return true;
     }
+
     /**
      * 在FTP服务器上创建并转到工作目录
      *
-     * @param relativePath
-     *            相对工作路径，不包含文件名：如 dd/11/22/33
-     * @param ftpClient
-     *            录创建是否成功
+     * @param relativePath 相对工作路径，不包含文件名：如 dd/11/22/33
+     * @param ftpClient    录创建是否成功
      * @return
      * @throws IOException
      */
@@ -295,19 +293,23 @@ public final class FTPUtils {
     private class MyCopyStreamListener implements CopyStreamListener {
         private long totalSize = 0;
         private long percent = -1; // 进度
+
         /**
          * 文件的总大小
+         *
          * @param totalSize
          */
         public MyCopyStreamListener(long totalSize) {
             super();
             this.totalSize = totalSize;
         }
+
         @Override
         public void bytesTransferred(CopyStreamEvent event) {
             bytesTransferred(event.getTotalBytesTransferred(),
                     event.getBytesTransferred(), event.getStreamSize());
         }
+
         //totalBytesTransferred:当前总共已传输字节数;
         //bytesTransferred:最近一次传输字节数
         @Override

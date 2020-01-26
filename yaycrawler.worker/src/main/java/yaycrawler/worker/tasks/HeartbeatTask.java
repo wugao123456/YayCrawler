@@ -9,6 +9,7 @@ public class HeartbeatTask {
     public HeartbeatTask() {
 
     }
+
     private MasterActor masterActor;
 
     public void sendHeartbeart() {

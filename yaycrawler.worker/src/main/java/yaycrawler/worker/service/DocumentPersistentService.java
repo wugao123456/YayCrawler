@@ -68,13 +68,13 @@ public class DocumentPersistentService implements IResultPersistentService {
 //            List<Header> headers = new ArrayList<>();
 //            headers.add(new BasicHeader("",""));
             for (Object o : data.values()) {
-                Map<String,Object> regionData=(Map<String,Object>)o;
-                if(regionData==null) continue;
+                Map<String, Object> regionData = (Map<String, Object>) o;
+                if (regionData == null) continue;
                 for (Object src : regionData.values()) {
                     if (src instanceof List)
                         srcList = (List<String>) src;
-                    else if(src instanceof HashedMap) {
-                        srcList.add(MapUtils.getString((HashedMap)src,"src"));
+                    else if (src instanceof HashedMap) {
+                        srcList.add(MapUtils.getString((HashedMap) src, "src"));
                     } else {
                         id = String.valueOf(src);
                     }
@@ -84,7 +84,7 @@ public class DocumentPersistentService implements IResultPersistentService {
                 crawlerRequest.setHashCode(DigestUtils.sha1Hex(pageUrl));
                 crawlerRequest.setMethod("get");
                 crawlerRequest.setUrl(pageUrl + "?$download=pdf");
-                crawlerRequest.setExtendMap(ImmutableMap.of("$DOWNLOAD",".pdf","$src",srcList));
+                crawlerRequest.setExtendMap(ImmutableMap.of("$DOWNLOAD", ".pdf", "$src", srcList));
                 downloadService.startCrawlerDownload(Lists.newArrayList(crawlerRequest));
 //                if (srcList == null || srcList.isEmpty())
 //                    continue;

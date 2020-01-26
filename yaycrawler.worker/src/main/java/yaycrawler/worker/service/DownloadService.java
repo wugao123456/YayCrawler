@@ -52,7 +52,7 @@ public class DownloadService {
         if (executorService == null || executorService.isShutdown())
             executorService = Executors.newFixedThreadPool(downList.size());
         for (CrawlerRequest request : downList) {
-            List<String> srcList = (List<String>) MapUtils.getObject(request.getExtendMap(),"$src");
+            List<String> srcList = (List<String>) MapUtils.getObject(request.getExtendMap(), "$src");
             if (srcList == null || srcList.isEmpty())
                 continue;
             executorService.submit(new Runnable() {
@@ -67,7 +67,7 @@ public class DownloadService {
                     HttpUtil httpUtil = HttpUtil.getInstance();
                     List<String> childRequestList = new LinkedList<>();
                     String suffix = MapUtils.getString(request.getExtendMap(), "$DOWNLOAD");
-                    for (String src:srcList) {
+                    for (String src : srcList) {
                         try {
                             HttpResponse response = httpUtil.doGet(src, null, null);
                             if (response.getStatusLine().getStatusCode() != 200) {
@@ -93,13 +93,13 @@ public class DownloadService {
                             e.printStackTrace();
                         }
                     }
-                    if(childRequestList.size() > 0) {
+                    if (childRequestList.size() > 0) {
                         CrawlerRequest crawlerRequest = new CrawlerRequest();
                         crawlerRequest.setDomain(request.getDomain());
                         crawlerRequest.setHashCode(request.getHashCode());
                         crawlerRequest.setMethod("get");
                         crawlerRequest.setUrl(request.getUrl() + "?$download=pdf");
-                        crawlerRequest.setExtendMap(ImmutableMap.of("$DOWNLOAD",".pdf","$src",childRequestList));
+                        crawlerRequest.setExtendMap(ImmutableMap.of("$DOWNLOAD", ".pdf", "$src", childRequestList));
                         pageParseListener.onSuccess(new Request(request.getUrl()), Lists.newArrayList(crawlerRequest));
                     }
                     try {

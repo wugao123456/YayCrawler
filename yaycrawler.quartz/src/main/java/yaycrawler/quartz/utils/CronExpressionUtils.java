@@ -11,7 +11,7 @@ public class CronExpressionUtils {
     public static boolean isValidExpression(String cronExpression) {
         try {
             if (StringUtils.isBlank(cronExpression)) return false;
-             CronScheduleBuilder.cronSchedule(cronExpression);
+            CronScheduleBuilder.cronSchedule(cronExpression);
             return true;
         } catch (Exception ex) {
             return false;

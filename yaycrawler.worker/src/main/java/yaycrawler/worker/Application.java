@@ -13,10 +13,10 @@ import yaycrawler.worker.listener.WorkerRegisterListener;
 @EnableJpaRepositories(basePackages = {"yaycrawler.dao.repositories"})
 public class Application {
 
-	public static void main(String[] args) {
-        SpringApplication springApplication =new SpringApplication(Application.class);
+    public static void main(String[] args) {
+        SpringApplication springApplication = new SpringApplication(Application.class);
         springApplication.addListeners(new WorkerRegisterListener());
         springApplication.run(args);
-	}
+    }
 
 }

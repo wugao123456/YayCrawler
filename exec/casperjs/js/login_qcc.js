@@ -124,8 +124,7 @@ casper.then(function () {
     if (result != null && result.status == 1) {
         deltaX = result.data.deltaX;
         this.echo("滑块位置求解成功:" + JSON.stringify(result.data));
-    }
-    else {
+    } else {
         this.echo("请求滑块位置失败:" + JSON.stringify(result));
         this.exit();
     }
@@ -187,30 +186,30 @@ casper.then(function () {
     casper.waitForSelectorTextChange('.gt_info_type', function () {
         var status = this.fetchText('.gt_info_type');
         this.echo("验证结果:" + status);
-        this.capture(status.replace(":","_")+ id + "_" + currentTrailIndex + '.png');
+        this.capture(status.replace(":", "_") + id + "_" + currentTrailIndex + '.png');
         if (status.indexOf("通过") > -1) {
             this.fillSelectors('form#user_login_normal', {
                 'input[name="nameNormal"]': username,
-                'input[name="pwdNormal"]':password
+                'input[name="pwdNormal"]': password
             }, true);
         }
     }, function () {
         this.echo("等待滑块移动超时！");
         this.exit();
     }, 10000);
-}).then(function() {
-    this.waitForSelector('li.nav-user', function() {
+}).then(function () {
+    this.waitForSelector('li.nav-user', function () {
         //this.echo(this.getPageContent());
         this.echo("自动登录成功！");
         this.echo("$CookieStart");
         this.echo(JSON.stringify(phantom.cookies));
         this.echo("$CookieEnd");
         this.exit();
-    },function() {
+    }, function () {
         //this.echo(this.getPageContent());
         this.echo("自动登录失败！");
         this.exit();
-    },10000);
+    }, 10000);
 });
 
 casper.run();

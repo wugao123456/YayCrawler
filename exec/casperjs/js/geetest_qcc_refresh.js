@@ -52,8 +52,8 @@ casper.on('remote.message', function (msg) {
 
 var pageUrl = casper.cli.get(0);
 var deltaResolveServer = casper.cli.get(1);
-var domain=casper.cli.get(2);
-var cookie= decodeURIComponent(decodeURIComponent(casper.cli.get(3)));
+var domain = casper.cli.get(2);
+var cookie = decodeURIComponent(decodeURIComponent(casper.cli.get(3)));
 
 //casper.echo(pageUrl);
 //casper.echo(deltaResolveServer);
@@ -61,7 +61,7 @@ var cookie= decodeURIComponent(decodeURIComponent(casper.cli.get(3)));
 //casper.echo(cookie);
 
 if (cookie != null) {
-    cookie.split(";").forEach(function(pair){
+    cookie.split(";").forEach(function (pair) {
         pair = pair.split("=");
         phantom.addCookie({
             'name': pair[0],
@@ -125,9 +125,9 @@ casper.waitFor(function check() {
     this.exist();
 }, 10000);
 
-var trailId=null;
-var deltaX=0;
-var trailArrayStr=null;
+var trailId = null;
+var deltaX = 0;
+var trailArrayStr = null;
 casper.then(function () {
     if (pageParam == null) {
         this.echo("收集图片参数失败!");
@@ -140,18 +140,17 @@ casper.then(function () {
     }, deltaResolveServer, {"params": JSON.stringify(pageParam)});
     if (result != null && result.status == 1) {
         trailArrayStr = result.data.trailArray;
-        deltaX=result.data.deltaX;
+        deltaX = result.data.deltaX;
         trailId = result.data.trailId;
         this.echo("滑块轨迹求解成功:" + JSON.stringify(result.data));
-    }
-    else {
+    } else {
         this.echo("请求滑块轨迹失败:" + JSON.stringify(result));
         this.exit();
     }
 });
 casper.then(function () {
-    this.echo("开始移动滑块,位移为:"+deltaX);
-    this.evaluate(function (selector, trailArrayStr,deltaX) {
+    this.echo("开始移动滑块,位移为:" + deltaX);
+    this.evaluate(function (selector, trailArrayStr, deltaX) {
         var deltaArray = eval(trailArrayStr);
         var createEvent = function (eventName, ofsx, ofsy) {
             var evt = document.createEvent('MouseEvents');
@@ -174,8 +173,8 @@ casper.then(function () {
                 obj.dispatchEvent(createEvent('mousemove', nowX, nowY));
                 console.log("当前滑块轨迹:" + obj.getBoundingClientRect().left);
                 if (nowX > (startX + deltaX)) {
-                    obj.dispatchEvent(createEvent('mousemove', startX + deltaX-2, nowY));
-                    obj.dispatchEvent(createEvent('mouseup', startX + deltaX-2, nowY));
+                    obj.dispatchEvent(createEvent('mousemove', startX + deltaX - 2, nowY));
+                    obj.dispatchEvent(createEvent('mouseup', startX + deltaX - 2, nowY));
                     console.log("最终滑块轨迹:" + obj.getBoundingClientRect().left);
                 } else {
                     moveToTarget(loopRec + 1);
@@ -184,7 +183,7 @@ casper.then(function () {
         };
         obj.dispatchEvent(createEvent("mousedown", startX, startY));
         moveToTarget(2);
-    }, ".gt_slider_knob", trailArrayStr,deltaX);
+    }, ".gt_slider_knob", trailArrayStr, deltaX);
 }).then(function () {
     casper.waitForSelectorTextChange('.gt_info_type', function () {
         var status = this.fetchText('.gt_info_type');

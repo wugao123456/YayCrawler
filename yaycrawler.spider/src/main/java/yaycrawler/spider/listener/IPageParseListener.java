@@ -12,7 +12,7 @@ public interface IPageParseListener {
 
     void onSuccess(Request request, List<CrawlerRequest> childRequestList);
 
-    void onError(Request request,String failureInfo);
+    void onError(Request request, String failureInfo);
 
     void onCookieChanged(Request request);
 

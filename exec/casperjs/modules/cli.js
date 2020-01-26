@@ -120,7 +120,7 @@ exports.parse = function parse(phantomArgs) {
         }
     });
     extract.raw = utils.mergeObjects(extract.raw, {
-        drop: function() {
+        drop: function () {
             return extract.drop.apply(extract, arguments);
         },
         has: extract.has,

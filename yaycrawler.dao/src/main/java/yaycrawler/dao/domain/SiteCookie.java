@@ -1,9 +1,9 @@
 package yaycrawler.dao.domain;
 
-import com.sun.istack.internal.NotNull;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.sql.Date;
 
@@ -17,11 +17,12 @@ public class SiteCookie implements Serializable {
     public SiteCookie() {
     }
 
-    public SiteCookie(String siteId,String domain, String cookie) {
+    public SiteCookie(String siteId, String domain, String cookie) {
         this.siteId = siteId;
         this.domain = domain;
         this.cookie = cookie;
     }
+
     public SiteCookie(String domain, String cookie) {
         this.domain = domain;
         this.cookie = cookie;
@@ -36,7 +37,7 @@ public class SiteCookie implements Serializable {
     @Column(name = "cookie", columnDefinition = "text")
     private String cookie;
 
-//    @NotNull
+    //    @NotNull
     @Column(columnDefinition = "varchar(38)")
     private String siteId;
 
@@ -44,8 +45,8 @@ public class SiteCookie implements Serializable {
     private String domain;
 
     @NotNull
-    @Column(name = "available",insertable = false,columnDefinition = "char default '1'")
-    private String  available;
+    @Column(name = "available", insertable = false, columnDefinition = "char default '1'")
+    private String available;
 
     @Column(name = "createdDate", columnDefinition = "timestamp default now()")
     private Date createdDate;

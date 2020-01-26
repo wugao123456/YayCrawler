@@ -6,8 +6,9 @@
     <bean id="workerRefreshTask" class="yaycrawler.master.quartz.WorkerRefreshTask">
     </bean>
     <bean id="breakedQueueRefreshTask" class="yaycrawler.master.quartz.BreakedQueueRefreshTask">
-        <property name="queueService" ref="redisCrawlerQueueService"></property>
-        <!--<property name="queueService" ref="mysqlQueueService"></property>-->
+<!--        <property name="queueService" ref="redisCrawlerQueueService"></property>-->
+
+        <property name="queueService" ref="crawlerQueueService"></property>
         <property name="queueTimeOut" value="${task.queue.timeout:3600000}"></property>
     </bean>
 
@@ -18,7 +19,8 @@
         <property name="targetMethod" value="refreshWorker"/>
     </bean>
 
-    <bean id="refreshBreakedQueueJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+    <bean id="refreshBreakedQueueJobDetail"
+          class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
         <property name="targetObject" ref="breakedQueueRefreshTask"/>
         <property name="targetMethod" value="refreshBreakedQueue"/>
     </bean>
@@ -35,7 +37,7 @@
         <property name="startDelay" value="20000"/>
         <property name="repeatInterval" value="${task.queue.timeout}"/>
     </bean>
-
+      <!--   为啥   就是SchedulerFactoryBean     job和trigger    各有两个-->
     <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
         <property name="jobDetails">
             <list>

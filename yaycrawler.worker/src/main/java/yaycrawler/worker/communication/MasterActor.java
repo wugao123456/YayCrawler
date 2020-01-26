@@ -40,7 +40,7 @@ public class MasterActor {
         String targetUrl = CommunicationAPIs.getFullRemoteUrl(WorkerContext.getMasterServerAddress(), CommunicationAPIs.WORKER_POST_MASTER_REGISTER);
         RestFulResult result = HttpUtils.doSignedHttpExecute(WorkerContext.getSignatureSecret(), targetUrl, HttpMethod.POST, workerRegistration);
         if (result.hasError()) {
-            logger.error("worker-{}注册Master失败,原因:{}", WorkerContext.getWorkerId(),result.getMessage());
+            logger.error("worker-{}注册Master失败,原因:{}", WorkerContext.getWorkerId(), result.getMessage());
             return false;
         }
         logger.info("worker-{}向Master注册成功！", WorkerContext.getWorkerId());
@@ -49,6 +49,7 @@ public class MasterActor {
 
     /**
      * Worker向Master发送心跳
+     *
      * @return
      */
     public boolean sendHeartbeart() {
@@ -71,15 +72,14 @@ public class MasterActor {
             //心跳失败的处理
 //            WorkerContext.heartbeatFailCount++;
             WorkerContext.addHeartbeatFailCount(1);
-            if(WorkerContext.getHeartbeatFailCount()>=10){
+            if (WorkerContext.getHeartbeatFailCount() >= 10) {
                 //worker应该停止自身所有的任务
                 logger.info("Worker已经与Master失联超过10个心跳周期，现在停止自身所有的任务");
                 taskScheduleService.interruptAllTasks();
 //                WorkerContext.heartbeatFailCount = 0;
                 WorkerContext.clearHeartbeatFailCount();
             }
-        }
-        else{
+        } else {
             //移除已经汇报成功的任务
             for (Map.Entry<String, CrawlerResult> resultEntry : completedResultSet) {
                 WorkerContext.completedResultMap.remove(resultEntry.getKey());
@@ -109,6 +109,7 @@ public class MasterActor {
 
     /**
      * Worker通知Master任务执行失败
+     *
      * @param crawlerResult
      * @return
      */

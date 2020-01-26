@@ -61,36 +61,36 @@ var Mouse = function Mouse(casper) {
         return [0, 0];
     };
 
-    var getPointFromViewPort = function getPointFromViewPort(page, x, y){
+    var getPointFromViewPort = function getPointFromViewPort(page, x, y) {
         var px = x - x % page.viewportSize.width;
         var py = y - y % page.viewportSize.height;
-        var max = casper.evaluate(function() {
-                return [__utils__.getDocumentWidth(), __utils__.getDocumentHeight()];
-            });
-        if (py > max[0] - page.viewportSize.width && max[0] > page.viewportSize.width){
+        var max = casper.evaluate(function () {
+            return [__utils__.getDocumentWidth(), __utils__.getDocumentHeight()];
+        });
+        if (py > max[0] - page.viewportSize.width && max[0] > page.viewportSize.width) {
             px = max[0] - page.viewportSize.width;
         }
-        if (py > max[1] - page.viewportSize.height && max[1] > page.viewportSize.height){
+        if (py > max[1] - page.viewportSize.height && max[1] > page.viewportSize.height) {
             py = max[1] - page.viewportSize.height;
         }
-        page.scrollPosition = { 'left': px, 'top': py };
-        return [ x - px, y - py ];
+        page.scrollPosition = {'left': px, 'top': py};
+        return [x - px, y - py];
     };
 
-    var getPointFromSelectorCoords = function getPointFromSelectorCoords(selector, clientX, clientY){
-        var convertNumberToIntAndPercentToFloat = function convertNumberToIntAndPercentToFloat(a, def){
+    var getPointFromSelectorCoords = function getPointFromSelectorCoords(selector, clientX, clientY) {
+        var convertNumberToIntAndPercentToFloat = function convertNumberToIntAndPercentToFloat(a, def) {
             return !!a && !isNaN(a) && parseInt(a, 10) ||
-            !!a && !isNaN(parseFloat(a)) && parseFloat(a) >= 0 &&
-              parseFloat(a) <= 100 && parseFloat(a) / 100 ||
-            def;
+                !!a && !isNaN(parseFloat(a)) && parseFloat(a) >= 0 &&
+                parseFloat(a) <= 100 && parseFloat(a) / 100 ||
+                def;
         };
         var bounds = casper.getElementBounds(selector),
             px = convertNumberToIntAndPercentToFloat(clientX, 0.5),
             py = convertNumberToIntAndPercentToFloat(clientY, 0.5);
 
         if (utils.isClipRect(bounds)) {
-            return [ bounds.left + (px ^ 0) + Math.round(bounds.width * (px - (px ^ 0)).toFixed(10)),
-                     bounds.top + (py ^ 0) + Math.round(bounds.height * (py - (py ^ 0)).toFixed(10)) ];
+            return [bounds.left + (px ^ 0) + Math.round(bounds.width * (px - (px ^ 0)).toFixed(10)),
+                bounds.top + (py ^ 0) + Math.round(bounds.height * (py - (py ^ 0)).toFixed(10))];
         }
         return [1, 1];
     };
@@ -143,16 +143,16 @@ var Mouse = function Mouse(casper) {
         processEvent('mousemove', arguments);
     };
 
-    this.processEvent = function() {
+    this.processEvent = function () {
         processEvent(arguments[0], [].slice.call(arguments, 1));
     };
 
     this.rightclick = function rightclick() {
         try {
             processEvent('contextmenu', arguments);
-        } catch (e) {
+        } catch (e) {
             var args = slice.call(arguments);
-        switch (args.length) {
+            switch (args.length) {
                 case 0:
                     throw new CasperError('Mouse.rightclick(): Too few arguments');
                 case 1:
@@ -160,7 +160,7 @@ var Mouse = function Mouse(casper) {
                     break;
                 case 2:
                     if (!utils.isNumber(args[0]) || !utils.isNumber(args[1])) {
-                       throw new CasperError('Mouse.rightclick(): No valid coordinates passed: ' + args);
+                        throw new CasperError('Mouse.rightclick(): No valid coordinates passed: ' + args);
                     }
                     var struct = casper.page.evaluate(function (clientX, clientY) {
                         var xpath = function xpath(el) {
@@ -180,14 +180,18 @@ var Mouse = function Mouse(casper) {
                                 (sames.length > 1 ? '[' + ([].indexOf.call(sames, el) + 1) + ']' : '');
                         };
                         try {
-                           var elem = document.elementFromPoint(clientX, clientY);
-                           var rec = elem.getBoundingClientRect();
-                           return { "selector": {"type": "xpath", "path": xpath(elem)},
-                                    "relX": clientX - rec.left, "relY": clientY - rec.top };
+                            var elem = document.elementFromPoint(clientX, clientY);
+                            var rec = elem.getBoundingClientRect();
+                            return {
+                                "selector": {"type": "xpath", "path": xpath(elem)},
+                                "relX": clientX - rec.left, "relY": clientY - rec.top
+                            };
                         } catch (ex) {
-                        return { "selector": {"type": "xpath", "path": "//html"},
-                                 "relX": clientX, "relY": clientY };
-                       }
+                            return {
+                                "selector": {"type": "xpath", "path": "//html"},
+                                "relX": clientX, "relY": clientY
+                            };
+                        }
                     }, args[0], args[1]);
                     casper.mouseEvent('contextmenu', struct.selector, struct.relX, struct.relY);
                     break;

@@ -17,10 +17,10 @@ public class DynamicCookieManager {
     @Autowired
     List<ICookieProvider> cookieProviderList;
 
-    public List<CrawlerCookie> getCookiesByDomain(String domain){
-        if(StringUtils.isEmpty(domain)) return null;
+    public List<CrawlerCookie> getCookiesByDomain(String domain) {
+        if (StringUtils.isEmpty(domain)) return null;
         for (ICookieProvider provider : cookieProviderList) {
-            if(provider.support(domain))
+            if (provider.support(domain))
                 return provider.getCookies();
         }
         return null;

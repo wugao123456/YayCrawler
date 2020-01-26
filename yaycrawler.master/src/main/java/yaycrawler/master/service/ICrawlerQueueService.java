@@ -38,6 +38,7 @@ public interface ICrawlerQueueService {
 
     /**
      * 当任务执行失败后将任务移到失败队列
+     *
      * @param taskCode
      * @param message
      * @return
@@ -47,7 +48,7 @@ public interface ICrawlerQueueService {
     /**
      * 从执行中队列把成功的任务移到成功队列
      *
-     * @param  crawlerResult
+     * @param crawlerResult
      * @return
      */
     boolean moveRunningTaskToSuccessQueue(CrawlerResult crawlerResult);
@@ -62,12 +63,15 @@ public interface ICrawlerQueueService {
 
     /**
      * 查询待执行队列
+     *
      * @param queryParam
      * @return
      */
     QueueQueryResult queryWaitingQueues(QueueQueryParam queryParam);
+
     /**
      * 查询执行中队列
+     *
      * @param queryParam
      * @return
      */
@@ -75,6 +79,7 @@ public interface ICrawlerQueueService {
 
     /**
      * 查询失败队列
+     *
      * @param queryParam
      * @return
      */
@@ -82,6 +87,7 @@ public interface ICrawlerQueueService {
 
     /**
      * 查询成功队列
+     *
      * @param queryParam
      * @return
      */

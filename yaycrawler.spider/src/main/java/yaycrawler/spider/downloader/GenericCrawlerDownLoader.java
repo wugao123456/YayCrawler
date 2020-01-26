@@ -47,30 +47,30 @@ public class GenericCrawlerDownLoader extends AbstractDownloader {
     @Override
     public Page download(Request request, Task task) {
         PageInfo pageInfo = pageParserRuleService.findOnePageInfoByRgx(request.getUrl());
-        if(pageInfo == null && request.getExtra("$pageInfo") != null) {
+        if (pageInfo == null && request.getExtra("$pageInfo") != null) {
             pageInfo = (PageInfo) request.getExtra("$pageInfo");
         }
         boolean isJsRendering = pageInfo != null && "1".equals(pageInfo.getIsJsRendering());
         String pageUrl = request.getUrl();
         SiteCookie siteCookie = pageCookieService.getCookieByUrl(pageUrl);
-        String cookie ="";
-        if(siteCookie!=null) {
-            cookie=siteCookie.getCookie();
+        String cookie = "";
+        if (siteCookie != null) {
+            cookie = siteCookie.getCookie();
             String cookieId = siteCookie.getId();
             request.putExtra("cookieId", cookieId);
         }
         //获取动态的cookies
         List<CrawlerCookie> dynamicCookieList = dynamicCookieManager.getCookiesByDomain(UrlUtils.getDomain(pageUrl));
-        if(dynamicCookieList!=null){
+        if (dynamicCookieList != null) {
             cookie += ";";
             for (CrawlerCookie crawlerCookie : dynamicCookieList) {
                 cookie += String.format("%s=%s", crawlerCookie.getName(), crawlerCookie.getValue());
             }
         }
         Page page = !isJsRendering ? httpClientDownloader.download(request, task, cookie) : mockDonwnloader.download(request, task, cookie);
-        if (!isJsRendering && (!"post".equalsIgnoreCase(request.getMethod())&&page != null) && page.getRawText() != null && redirectPattern.matcher(page.getRawText()).find())
+        if (!isJsRendering && (!"post".equalsIgnoreCase(request.getMethod()) && page != null) && page.getRawText() != null && redirectPattern.matcher(page.getRawText()).find())
             page = mockDonwnloader.download(request, task, cookie);
-        if(page != null && page.getRawText() == null)
+        if (page != null && page.getRawText() == null)
             return null;
         return page;
     }

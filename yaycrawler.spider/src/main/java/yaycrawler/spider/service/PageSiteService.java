@@ -57,15 +57,17 @@ public class PageSiteService {
                     for (Map.Entry<String, String> entry : headMap.entrySet()) {
                         site.addHeader(entry.getKey(), entry.getValue());
                     }
-                }catch (Exception ex) {}
+                } catch (Exception ex) {
+                }
             }
             if (!StringUtils.isBlank(pageSite.getDefaultCookies())) {
                 try {
-                Map<String, String> cookiesMap = JSON.parseObject(pageSite.getDefaultCookies(), Map.class);
-                for (Map.Entry<String, String> entry : cookiesMap.entrySet()) {
-                    site.addCookie(domain, entry.getKey(), entry.getValue());
+                    Map<String, String> cookiesMap = JSON.parseObject(pageSite.getDefaultCookies(), Map.class);
+                    for (Map.Entry<String, String> entry : cookiesMap.entrySet()) {
+                        site.addCookie(domain, entry.getKey(), entry.getValue());
+                    }
+                } catch (Exception ex) {
                 }
-                }catch (Exception ex) {}
             }
 //            //只设置一个有效Cookie即可
 //            if (pageSite.getCookieList() != null)
@@ -79,7 +81,6 @@ public class PageSiteService {
         }
         return site;
     }
-
 
 
     public PageSite getPageSiteByUrl(String pageUrl) {

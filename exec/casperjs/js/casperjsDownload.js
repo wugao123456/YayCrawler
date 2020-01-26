@@ -1,6 +1,6 @@
 var utils = require('utils');
 var casper = require('casper').create({
-    clientScripts:  [
+    clientScripts: [
         //'jquery.min.js',      // These two scripts will be injected in remote
         //'underscore-min.js'   // DOM on every request
     ],
@@ -16,11 +16,11 @@ var casper = require('casper').create({
     httpStatusHandlers: {
         404: function () {
             console.log(404);
-        },500: function () {
+        }, 500: function () {
             console.log(500);
-        },200: function () {
+        }, 200: function () {
             console.log(200);
-        },403: function () {
+        }, 403: function () {
             console.log(403);
         }
     },
@@ -69,7 +69,7 @@ if (userAgent != null) {
     casper.userAgent(userAgent);
 }
 if (cookie != null) {
-    cookie.split(";").forEach(function(pair){
+    cookie.split(";").forEach(function (pair) {
         pair = pair.split("=");
         phantom.addCookie({
             'name': pair[0],
@@ -84,12 +84,12 @@ casper.on('remote.message', function (msg) {
 
 casper.start(address);
 
-casper.then(function(){
+casper.then(function () {
     this.wait(10000, function () {
         this.echo(this.getPageContent());
         this.exit();
     });
-}).then(function(){
+}).then(function () {
     this.exit();
 });
 

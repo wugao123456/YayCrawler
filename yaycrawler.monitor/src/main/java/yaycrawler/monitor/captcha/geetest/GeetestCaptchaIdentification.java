@@ -19,18 +19,18 @@ public class GeetestCaptchaIdentification {
      * 验证码自动识别     *
      *
      * @param pageUrl             包含验证码的页面url
-     * @param jsFileName        要执行的js文件的名称
+     * @param jsFileName          要执行的js文件的名称
      * @param deltaResolveAddress 能够解析验证码移动位移的服务地址
      * @return
      */
-    public static boolean process(String pageUrl,String domain,String cookies,String jsFileName, String deltaResolveAddress) {
+    public static boolean process(String pageUrl, String domain, String cookies, String jsFileName, String deltaResolveAddress) {
         logger.info("滑块位置服务：" + deltaResolveAddress);
         if (pageUrl == null) return false;
-        boolean flag = startIdentification(pageUrl,domain,cookies,jsFileName, deltaResolveAddress);
+        boolean flag = startIdentification(pageUrl, domain, cookies, jsFileName, deltaResolveAddress);
         if (!flag) {
             int i = 0;
             while (i++ < 1) {
-                flag = startIdentification(pageUrl,domain,cookies,jsFileName, deltaResolveAddress);
+                flag = startIdentification(pageUrl, domain, cookies, jsFileName, deltaResolveAddress);
                 logger.info("第{}次重试！", i);
                 if (flag) break;
             }
@@ -38,7 +38,7 @@ public class GeetestCaptchaIdentification {
         return flag;
     }
 
-    private static boolean startIdentification(String pageUrl,String domain,String cookies,String jsFileName, String deltaResolveAddress) {
+    private static boolean startIdentification(String pageUrl, String domain, String cookies, String jsFileName, String deltaResolveAddress) {
         List<String> paramList = new ArrayList<>();
         paramList.add(pageUrl);
         paramList.add(deltaResolveAddress);
@@ -60,13 +60,13 @@ public class GeetestCaptchaIdentification {
         for (int i = 0; i < totalCount; i++) {
             stopWatch.reset();
             stopWatch.start();
-            if (startIdentification(pageUrl,null,null,"geetest_refresh.js", deltaResolveAddress))
+            if (startIdentification(pageUrl, null, null, "geetest_refresh.js", deltaResolveAddress))
                 successCount++;
             else {
                 int t = retryCount;
                 while (t > 0) {
                     System.out.println("重试一次");
-                    if (startIdentification(pageUrl, null,null,"geetest_refresh.js",deltaResolveAddress)) {
+                    if (startIdentification(pageUrl, null, null, "geetest_refresh.js", deltaResolveAddress)) {
                         successCount++;
                         break;
                     }

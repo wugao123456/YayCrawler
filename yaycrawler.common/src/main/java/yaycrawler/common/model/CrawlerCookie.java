@@ -1,10 +1,11 @@
 package yaycrawler.common.model;
 
-/**表示一个cookie对象
+/**
+ * 表示一个cookie对象
  * Created by  yuananyun on 2017/3/25.
  */
 public class CrawlerCookie {
-//    private String domain;
+    //    private String domain;
     private String name;
     private String value;
 

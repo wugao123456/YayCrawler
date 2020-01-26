@@ -1,4 +1,5 @@
 package yaycrawler.common.model;
+
 import com.alibaba.fastjson.JSON;
 import org.apache.commons.codec.digest.DigestUtils;
 import yaycrawler.common.utils.UrlUtils;
@@ -10,7 +11,7 @@ import java.util.Map;
 /**
  * Created by Administrator on 2016/5/12.
  */
-public class CrawlerRequest implements Serializable{
+public class CrawlerRequest implements Serializable {
 
     private String url;
     private String method;
@@ -20,16 +21,16 @@ public class CrawlerRequest implements Serializable{
     private Map extendMap;
 
     /**
-     *
      * startTime:开始时间
-     workerId:分配workerID
-     message;
-     crawlerRequests
-     hashCode
+     * workerId:分配workerID
+     * message;
+     * crawlerRequests
+     * hashCode
+     *
      * @return
      */
     public Map getExtendMap() {
-        return extendMap==null?new HashMap() :extendMap ;
+        return extendMap == null ? new HashMap() : extendMap;
     }
 
     public void setExtendMap(Map extendMap) {
@@ -37,7 +38,7 @@ public class CrawlerRequest implements Serializable{
     }
 
     public String getHashCode() {
-        if(hashCode!=null) return hashCode;
+        if (hashCode != null) return hashCode;
         return DigestUtils.sha1Hex(getUniqueUrl(this));
     }
 
@@ -53,7 +54,8 @@ public class CrawlerRequest implements Serializable{
         this.method = method;
         this.domain = domain;
     }
-    public CrawlerRequest(String url, String method,Map data) {
+
+    public CrawlerRequest(String url, String method, Map data) {
         this.url = url;
         this.method = method;
         this.domain = UrlUtils.getDomain(url);

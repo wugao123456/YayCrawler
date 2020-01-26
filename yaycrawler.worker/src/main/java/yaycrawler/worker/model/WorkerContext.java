@@ -13,10 +13,10 @@ public class WorkerContext {
     private static String masterAddress;
     private static Long heartbeatInteval;
     private static String token;
-    private static Integer heartbeatFailCount=0;
+    private static Integer heartbeatFailCount = 0;
     public static boolean isSuccessRegisted = false;
     public static WebApplicationContext webApplicationContext;
-    public static final ConcurrentHashMap<String,CrawlerResult> completedResultMap=new ConcurrentHashMap<>();
+    public static final ConcurrentHashMap<String, CrawlerResult> completedResultMap = new ConcurrentHashMap<>();
 
     public static String getWorkerId() {
         return getContextPath();

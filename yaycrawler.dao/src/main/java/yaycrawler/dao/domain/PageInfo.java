@@ -1,10 +1,12 @@
 package yaycrawler.dao.domain;
 
 import com.alibaba.fastjson.JSON;
-import com.sun.istack.internal.NotNull;
+
+
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.sql.Date;
 import java.util.Map;
 import java.util.Set;
@@ -50,7 +52,7 @@ public class PageInfo {
     @JoinColumn(name = "pageId", insertable = false, updatable = false)
     private Set<PageParseRegion> pageParseRegions;
 
-    @Column(name = "pageValidationRule",columnDefinition = "varchar(500)")
+    @Column(name = "pageValidationRule", columnDefinition = "varchar(500)")
     private String pageValidationRule;
 
     public String getPageValidationRule() {

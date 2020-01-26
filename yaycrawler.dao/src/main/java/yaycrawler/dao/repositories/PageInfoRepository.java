@@ -15,12 +15,12 @@ import javax.persistence.OrderBy;
  * Created by ucs_yuananyun on 2016/5/10.
  */
 @Repository
-public  interface PageInfoRepository extends CrudRepository<PageInfo, String> {
+public interface PageInfoRepository extends CrudRepository<PageInfo, String> {
 
-    @Query(value="select *  from conf_page_info pi where ? REGEXP  pi.url_rgx",nativeQuery = true)
+    @Query(value = "select *  from conf_page_info pi where ? REGEXP  pi.url_rgx", nativeQuery = true)
     PageInfo findOneByUrlRgx(String url);
 
-//    @OrderBy("createdDate desc ")
+    //    @OrderBy("createdDate desc ")
     Page<PageInfo> findAllByOrderByCreatedDateDesc(Pageable pageable);
 
 

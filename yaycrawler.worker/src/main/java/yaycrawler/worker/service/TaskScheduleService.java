@@ -87,9 +87,9 @@ public class TaskScheduleService {
             logger.info("worker接收到{}个任务", taskList.size());
             List<CrawlerRequest> downList = Lists.newArrayList();
             for (CrawlerRequest crawlerRequest : taskList) {
-                if(crawlerRequest==null) continue;
+                if (crawlerRequest == null) continue;
                 //如果查找不到与url相关的解析规则，则该任务不能执行
-                if(MapUtils.getString(crawlerRequest.getExtendMap(),"$DOWNLOAD") != null) {
+                if (MapUtils.getString(crawlerRequest.getExtendMap(), "$DOWNLOAD") != null) {
                     downList.add(crawlerRequest);
                 }
                 if (pageParserRuleService.findOnePageInfoByRgx(crawlerRequest.getUrl()) == null) {
@@ -105,12 +105,12 @@ public class TaskScheduleService {
                 if (spider.getStatus() != Spider.Status.Running)
                     spider.runAsync();
             }
-            if(downList.size() > 0 ) {
+            if (downList.size() > 0) {
                 downloadService.startCrawlerDownload(downList);
             }
             logger.info("worker任务分配完成！");
         } catch (Exception ex) {
-            logger.error(ex.getMessage(),ex);
+            logger.error(ex.getMessage(), ex);
         }
     }
 

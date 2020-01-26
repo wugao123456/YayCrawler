@@ -50,23 +50,24 @@ function betterTypeOf(input) {
         case null:
             return 'null';
         default:
-        try {
-            var type = Object.prototype.toString.call(input).match(/^\[object\s(.*)\]$/)[1].toLowerCase();
-            if (type === 'object' &&
-                phantom.casperEngine !== "phantomjs" &&
-                '__type' in input) {
-                type = input.__type;
+            try {
+                var type = Object.prototype.toString.call(input).match(/^\[object\s(.*)\]$/)[1].toLowerCase();
+                if (type === 'object' &&
+                    phantom.casperEngine !== "phantomjs" &&
+                    '__type' in input) {
+                    type = input.__type;
+                }
+                // gecko returns window instead of domwindow
+                else if (type === 'window') {
+                    return 'domwindow';
+                }
+                return type;
+            } catch (e) {
+                return typeof input;
             }
-            // gecko returns window instead of domwindow
-            else if (type === 'window') {
-                return 'domwindow';
-            }
-            return type;
-        } catch (e) {
-            return typeof input;
-        }
     }
 }
+
 exports.betterTypeOf = betterTypeOf;
 
 /**
@@ -81,23 +82,24 @@ function betterInstanceOf(input, constructor) {
     "use strict";
     /*eslint eqeqeq:0 */
     if (typeof input == 'undefined' || input == null) {
-      return false;
+        return false;
     }
     var inputToTest = input;
     while (inputToTest != null) {
-      if (inputToTest == constructor.prototype) {
-        return true;
-      }
-      if (typeof inputToTest == 'xml') {
-        return constructor.prototype == document.prototype;
-      }
-      if (typeof inputToTest == 'undefined') {
-        return false;
-      }
-      inputToTest = inputToTest.__proto__;
+        if (inputToTest == constructor.prototype) {
+            return true;
+        }
+        if (typeof inputToTest == 'xml') {
+            return constructor.prototype == document.prototype;
+        }
+        if (typeof inputToTest == 'undefined') {
+            return false;
+        }
+        inputToTest = inputToTest.__proto__;
     }
     return equals(input.constructor.name, constructor.name);
 }
+
 exports.betterInstanceOf = betterInstanceOf;
 
 /**
@@ -115,6 +117,7 @@ function cleanUrl(url) {
     a.href = url;
     return a.href;
 }
+
 exports.cleanUrl = cleanUrl;
 
 /**
@@ -127,6 +130,7 @@ function clone(o) {
     "use strict";
     return JSON.parse(JSON.stringify(o));
 }
+
 exports.clone = clone;
 
 /**
@@ -140,17 +144,18 @@ exports.clone = clone;
 function computeModifier(modifierString, modifiers) {
     "use strict";
     var modifier = 0,
-        checkKey = function(key) {
+        checkKey = function (key) {
             if (key in modifiers) return;
             throw new CasperError(format('%s is not a supported key modifier', key));
         };
     if (!modifierString) return modifier;
     var keys = modifierString.split('+');
     keys.forEach(checkKey);
-    return keys.reduce(function(acc, key) {
+    return keys.reduce(function (acc, key) {
         return acc | modifiers[key];
     }, modifier);
 }
+
 exports.computeModifier = computeModifier;
 
 /**
@@ -167,6 +172,7 @@ function decodeUrl(url) {
         return unescape(url);
     }
 }
+
 exports.decodeUrl = decodeUrl;
 
 /**
@@ -179,6 +185,7 @@ function dump(value) {
     "use strict";
     console.log(serialize(value, 4));
 }
+
 exports.dump = dump;
 
 /**
@@ -208,6 +215,7 @@ function equals(v1, v2) {
     }
     return v1 === v2;
 }
+
 exports.equals = equals;
 
 /**
@@ -220,10 +228,11 @@ function fileExt(file) {
     "use strict";
     try {
         return file.split('.').pop().toLowerCase().trim();
-    } catch(e) {
+    } catch (e) {
         return '';
     }
 }
+
 exports.fileExt = fileExt;
 
 /**
@@ -241,6 +250,7 @@ function fillBlanks(text, pad) {
     }
     return text;
 }
+
 exports.fillBlanks = fillBlanks;
 
 /**
@@ -256,16 +266,16 @@ function format(f) {
     var str = String(f).replace(/%[sdj%]/g, function _replace(x) {
         if (i >= len) return x;
         switch (x) {
-        case '%s':
-            return String(args[i++]);
-        case '%d':
-            return Number(args[i++]);
-        case '%j':
-            return JSON.stringify(args[i++]);
-        case '%%':
-            return '%';
-        default:
-            return x;
+            case '%s':
+                return String(args[i++]);
+            case '%d':
+                return Number(args[i++]);
+            case '%j':
+                return JSON.stringify(args[i++]);
+            case '%%':
+                return '%';
+            default:
+                return x;
         }
     });
     for (var x = args[i]; i < len; x = args[++i]) {
@@ -277,6 +287,7 @@ function format(f) {
     }
     return str;
 }
+
 exports.format = format;
 
 /**
@@ -295,7 +306,7 @@ function formatTestValue(value, name) {
         }
     } else if (name === 'stack') {
         if (isArray(value)) {
-            formatted += value.map(function(entry) {
+            formatted += value.map(function (entry) {
                 return format('in %s() in %s:%d', (entry['function'] || "anonymous"), entry.file, entry.line);
             }).join('\n');
         } else {
@@ -314,6 +325,7 @@ function formatTestValue(value, name) {
     }
     return formatted;
 }
+
 exports.formatTestValue = formatTestValue;
 
 /**
@@ -331,7 +343,7 @@ function getPropertyPath(obj, path) {
         return undefined;
     }
     var value = obj;
-    path.split('.').forEach(function(property) {
+    path.split('.').forEach(function (property) {
         if (typeof value === "object" && property in value) {
             value = value[property];
         } else {
@@ -340,6 +352,7 @@ function getPropertyPath(obj, path) {
     });
     return value;
 }
+
 exports.getPropertyPath = getPropertyPath;
 
 /**
@@ -352,10 +365,11 @@ exports.getPropertyPath = getPropertyPath;
  */
 function indent(string, nchars, prefix) {
     "use strict";
-    return string.split('\n').map(function(line) {
+    return string.split('\n').map(function (line) {
         return (prefix || '') + new Array(nchars).join(' ') + line;
     }).join('\n');
 }
+
 exports.indent = indent;
 
 /**
@@ -377,6 +391,7 @@ function inherits(ctor, superCtor) {
         }
     });
 }
+
 exports.inherits = inherits;
 
 /**
@@ -389,6 +404,7 @@ function isArray(value) {
     "use strict";
     return Array.isArray(value) || isType(value, "array");
 }
+
 exports.isArray = isArray;
 
 /**
@@ -401,6 +417,7 @@ function isCasperObject(value) {
     "use strict";
     return value instanceof require('casper').Casper;
 }
+
 exports.isCasperObject = isCasperObject;
 
 /**
@@ -417,6 +434,7 @@ function isClipRect(value) {
         isNumber(value.width) && isNumber(value.height)
     );
 }
+
 exports.isClipRect = isClipRect;
 
 /**
@@ -430,7 +448,9 @@ function isFalsy(subject) {
     /*eslint eqeqeq:0*/
     return !subject;
 }
+
 exports.isFalsy = isFalsy;
+
 /**
  * Checks if value is a javascript Function
  *
@@ -441,6 +461,7 @@ function isFunction(value) {
     "use strict";
     return isType(value, "function");
 }
+
 exports.isFunction = isFunction;
 
 /**
@@ -453,6 +474,7 @@ function isHTTPResource(resource) {
     "use strict";
     return isObject(resource) && /^http/i.test(resource.url);
 }
+
 exports.isHTTPResource = isHTTPResource;
 
 /**
@@ -464,13 +486,14 @@ exports.isHTTPResource = isHTTPResource;
 function isJsFile(file) {
     "use strict";
     var ext = fileExt(file);
-    var valid = Object.keys(require.extensions).map(function(val) {
+    var valid = Object.keys(require.extensions).map(function (val) {
         return val.replace(/^\./, '');
-    }).filter(function(ext) {
+    }).filter(function (ext) {
         return ext !== 'json';
     });
     return isString(ext, "string") && valid.indexOf(ext) !== -1;
 }
+
 exports.isJsFile = isJsFile;
 
 /**
@@ -482,6 +505,7 @@ function isNull(value) {
     "use strict";
     return isType(value, "null");
 }
+
 exports.isNull = isNull;
 
 /**
@@ -494,6 +518,7 @@ function isNumber(value) {
     "use strict";
     return isType(value, "number");
 }
+
 exports.isNumber = isNumber;
 
 /**
@@ -507,6 +532,7 @@ function isObject(value) {
     var objectTypes = ["array", "object", "qtruntimeobject"];
     return objectTypes.indexOf(betterTypeOf(value)) >= 0;
 }
+
 exports.isObject = isObject;
 
 /**
@@ -519,6 +545,7 @@ function isRegExp(value) {
     "use strict";
     return isType(value, "regexp");
 }
+
 exports.isRegExp = isRegExp;
 
 /**
@@ -531,6 +558,7 @@ function isString(value) {
     "use strict";
     return isType(value, "string");
 }
+
 exports.isString = isString;
 
 /**
@@ -544,6 +572,7 @@ function isTruthy(subject) {
     /*eslint eqeqeq:0*/
     return !!subject;
 }
+
 exports.isTruthy = isTruthy;
 
 /**
@@ -561,6 +590,7 @@ function isType(what, typeName) {
     }
     return betterTypeOf(what).toLowerCase() === typeName.toLowerCase();
 }
+
 exports.isType = isType;
 
 /**
@@ -572,6 +602,7 @@ function isUndefined(value) {
     "use strict";
     return isType(value, "undefined");
 }
+
 exports.isUndefined = isUndefined;
 
 /**
@@ -586,7 +617,7 @@ function isValidSelector(value) {
         try {
             // phantomjs env has a working document object, let's use it
             document.querySelector(value);
-        } catch(e) {
+        } catch (e) {
             if ('name' in e && (e.name === 'SYNTAX_ERR' || e.name === 'SyntaxError')) {
                 return false;
             }
@@ -606,6 +637,7 @@ function isValidSelector(value) {
     }
     return false;
 }
+
 exports.isValidSelector = isValidSelector;
 
 /**
@@ -618,13 +650,13 @@ function isWebPage(what) {
     "use strict";
     return betterTypeOf(what) === "qtruntimeobject" && what.objectName === 'WebPage';
 }
-exports.isWebPage = isWebPage;
 
+exports.isWebPage = isWebPage;
 
 
 function isPlainObject(obj) {
     "use strict";
-    if (!obj || typeof(obj) !== 'object')
+    if (!obj || typeof (obj) !== 'object')
         return false;
     var type = Object.prototype.toString.call(obj).match(/^\[object\s(.*)\]$/)[1].toLowerCase();
     return (type === 'object');
@@ -660,8 +692,7 @@ function mergeObjectsInGecko(origin, add, opts) {
             var prop = Object.getOwnPropertyDescriptor(add, p);
             if (prop.get && !prop.set) {
                 Object.defineProperty(origin, p, prop);
-            }
-            else {
+            } else {
                 origin[p] = add[p];
             }
         }
@@ -703,6 +734,7 @@ function mergeObjects(origin, add, opts) {
     }
     return origin;
 }
+
 exports.mergeObjects = mergeObjects;
 
 /**
@@ -715,6 +747,7 @@ function ms2seconds(milliseconds) {
     "use strict";
     return Math.round(milliseconds / 1000 * 1000) / 1000;
 }
+
 exports.ms2seconds = ms2seconds;
 
 /**
@@ -726,7 +759,7 @@ exports.ms2seconds = ms2seconds;
  */
 function node(name, attributes) {
     "use strict";
-    var _node   = document.createElementNS('', name);
+    var _node = document.createElementNS('', name);
     for (var attrName in attributes) {
         var value = attributes[attrName];
         if (attributes.hasOwnProperty(attrName) && isString(attrName)) {
@@ -735,6 +768,7 @@ function node(name, attributes) {
     }
     return _node;
 }
+
 exports.node = node;
 
 /**
@@ -745,10 +779,11 @@ exports.node = node;
  */
 function objectValues(obj) {
     "use strict";
-    return Object.keys(obj).map(function(arg) {
+    return Object.keys(obj).map(function (arg) {
         return obj[arg];
     });
 }
+
 exports.objectValues = objectValues;
 
 /**
@@ -765,6 +800,7 @@ function quoteXPathAttributeString(string) {
         return '"' + string + '"';
     }
 }
+
 exports.quoteXPathAttributeString = quoteXPathAttributeString;
 
 /**
@@ -782,6 +818,7 @@ function serialize(value, indent) {
     }
     return JSON.stringify(value, null, indent);
 }
+
 exports.serialize = serialize;
 
 /**
@@ -805,6 +842,7 @@ function unique(array) {
     }
     return r;
 }
+
 exports.unique = unique;
 
 /**
@@ -816,10 +854,12 @@ function versionToString(version) {
     if (isObject(version)) {
         try {
             return [version.major, version.minor, version.patch].join('.');
-        } catch (e) {}
+        } catch (e) {
+        }
     }
     return version;
 }
+
 exports.versionToString = versionToString;
 
 /**
@@ -845,6 +885,7 @@ function cmpVersion(a, b) {
     }
     return a.length - b.length;
 }
+
 exports.cmpVersion = cmpVersion;
 
 /**
@@ -858,6 +899,7 @@ function gteVersion(a, b) {
     "use strict";
     return cmpVersion(a, b) >= 0;
 }
+
 exports.gteVersion = gteVersion;
 
 /**
@@ -871,6 +913,7 @@ function ltVersion(a, b) {
     "use strict";
     return cmpVersion(a, b) < 0;
 }
+
 exports.ltVersion = ltVersion;
 
 /**
@@ -923,4 +966,5 @@ function matchEngine(matchSpec) {
     }
     return false;
 }
+
 exports.matchEngine = matchEngine;

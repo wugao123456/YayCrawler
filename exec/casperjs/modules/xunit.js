@@ -87,6 +87,7 @@ function XUnitExporter() {
     this.results = undefined;
     this.rendered = false;
 }
+
 exports.XUnitExporter = XUnitExporter;
 
 /**
@@ -102,7 +103,7 @@ XUnitExporter.prototype.getXML = function getXML() {
     if (!(this.results instanceof TestSuiteResult)) {
         throw new CasperError('Results not set, cannot get XML.');
     }
-    this.results.forEach(function(result) {
+    this.results.forEach(function (result) {
         var suiteNode = utils.node('testsuite', {
             name: result.name,
             tests: result.assertions,
@@ -113,7 +114,7 @@ XUnitExporter.prototype.getXML = function getXML() {
             'package': generateClassName(result.file)
         });
         // successful test cases
-        result.passes.forEach(function(success) {
+        result.passes.forEach(function (success) {
             var testCase = utils.node('testcase', {
                 name: success.message || success.standard,
                 classname: generateClassName(success.file),
@@ -122,7 +123,7 @@ XUnitExporter.prototype.getXML = function getXML() {
             suiteNode.appendChild(testCase);
         });
         // failed test cases
-        result.failures.forEach(function(failure) {
+        result.failures.forEach(function (failure) {
             var testCase = utils.node('testcase', {
                 name: failure.name || failure.message || failure.standard,
                 classname: generateClassName(failure.file),
@@ -143,7 +144,7 @@ XUnitExporter.prototype.getXML = function getXML() {
             suiteNode.appendChild(testCase);
         });
         // errors
-        result.errors.forEach(function(error) {
+        result.errors.forEach(function (error) {
             var errorNode = utils.node('error', {
                 type: error.name
             });
@@ -174,7 +175,7 @@ XUnitExporter.prototype.getSerializedXML = function getSerializedXML() {
     var serializer = new XMLSerializer(),
         document;
 
-    if ( !this.rendered ) {
+    if (!this.rendered) {
         document = this.getXML();
     }
     return '<?xml version="1.0" encoding="UTF-8"?>' + serializer.serializeToString(document);
@@ -204,7 +205,7 @@ XUnitExporter.prototype.setResults = function setResults(results) {
  *
  * @return void
  */
-XUnitExporter.prototype.setupDocument = function() {
+XUnitExporter.prototype.setupDocument = function () {
     // Since we are outputting XML, let's do our own document type
     var documentType = document.implementation.createDocumentType("casperjs", "-//CasperJS//XUnit Test Results", "testsuites");
 

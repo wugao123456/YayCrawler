@@ -9,6 +9,7 @@ import yaycrawler.master.service.ICrawlerQueueService;
  */
 public class BreakedQueueRefreshTask {
     private static final Logger logger = LoggerFactory.getLogger(BreakedQueueRefreshTask.class);
+
     private ICrawlerQueueService queueService;
     private Long queueTimeOut;
 

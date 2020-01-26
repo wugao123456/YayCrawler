@@ -30,7 +30,7 @@
 
 /*global escape, NodeList*/
 
-(function(exports) {
+(function (exports) {
     "use strict";
 
     exports.create = function create(options) {
@@ -49,7 +49,7 @@
             -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
             -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 62, -1, -1, -1, 63,
             52, 53, 54, 55, 56, 57, 58, 59, 60, 61, -1, -1, -1, -1, -1, -1,
-            -1,  0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14,
+            -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14,
             15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, -1, -1, -1, -1, -1,
             -1, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
             41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, -1, -1, -1, -1, -1
@@ -274,20 +274,22 @@
             }
 
             var finders = {
-                css: function(inputSelector) {
+                css: function (inputSelector) {
                     return this.findAll(inputSelector, form);
                 },
-                labels: function(labelText) {
-                    var label = this.findOne({type: "xpath", path: '//label[text()="' +
-                    labelText + '"]'}, form);
+                labels: function (labelText) {
+                    var label = this.findOne({
+                        type: "xpath", path: '//label[text()="' +
+                            labelText + '"]'
+                    }, form);
                     if (label && label.htmlFor) {
                         return this.findAll('#' + label.htmlFor, form);
                     }
                 },
-                names: function(elementName) {
+                names: function (elementName) {
                     return this.findAll('[name="' + elementName + '"]', form);
                 },
-                xpath: function(xpath) {
+                xpath: function (xpath) {
                     return this.findAll({type: "xpath", path: xpath}, form);
                 }
             };
@@ -379,7 +381,7 @@
          */
         this.forceTarget = function forceTarget(selector, target) {
             var elem = this.findOne(selector);
-            while (!!elem && elem.tagName !== 'A' &&  elem.tagName !== 'FORM' && elem.tagName !== 'BODY'){
+            while (!!elem && elem.tagName !== 'A' && elem.tagName !== 'FORM' && elem.tagName !== 'BODY') {
                 elem = elem.parentNode;
             }
             if (elem === 'A' || elem === 'FORM') {
@@ -491,7 +493,7 @@
         this.getElementsBounds = function getElementsBounds(selector) {
             var elements = this.findAll(selector);
             try {
-                return Array.prototype.map.call(elements, function(element) {
+                return Array.prototype.map.call(elements, function (element) {
                     var clipRect = element.getBoundingClientRect();
                     return {
                         top: clipRect.top,
@@ -515,7 +517,7 @@
             var element = this.findOne(selector);
             var bounds = this.getElementBounds(selector);
             var attributes = {};
-            [].forEach.call(element.attributes, function(attr) {
+            [].forEach.call(element.attributes, function (attr) {
                 attributes[attr.name.toLowerCase()] = attr.value;
             });
             return {
@@ -541,9 +543,9 @@
         this.getElementsInfo = function getElementsInfo(selector) {
             var bounds = this.getElementsBounds(selector);
             var eleVisible = this.elementVisible;
-            return [].map.call(this.findAll(selector), function(element, index) {
+            return [].map.call(this.findAll(selector), function (element, index) {
                 var attributes = {};
-                [].forEach.call(element.attributes, function(attr) {
+                [].forEach.call(element.attributes, function (attr) {
                     attributes[attr.name.toLowerCase()] = attr.value;
                 });
                 return {
@@ -611,9 +613,9 @@
                 }
 
                 if (input.type === 'select-multiple') {
-                    return [].filter.call(input.options, function(option) {
+                    return [].filter.call(input.options, function (option) {
                         return !!option.selected;
-                    }).map(function(option) {
+                    }).map(function (option) {
                         return option.value;
                     });
                 }
@@ -632,13 +634,13 @@
                 type = inputs[0].getAttribute('type').toLowerCase();
                 if (type === 'radio') {
                     var value;
-                    [].forEach.call(inputs, function(radio) {
+                    [].forEach.call(inputs, function (radio) {
                         value = radio.checked ? radio.value : value;
                     });
                     return value;
                 } else if (type === 'checkbox') {
                     var values = [];
-                    [].forEach.call(inputs, function(checkbox) {
+                    [].forEach.call(inputs, function (checkbox) {
                         if (checkbox.checked) {
                             values.push(checkbox.value);
                         }
@@ -661,9 +663,12 @@
             }
 
             switch (inputs.length) {
-                case 0: return undefined;
-                case 1: return getSingleValue(inputs[0]);
-                default: return getMultipleValues(inputs);
+                case 0:
+                    return undefined;
+                case 1:
+                    return getSingleValue(inputs[0]);
+                default:
+                    return getMultipleValues(inputs);
             }
         };
 
@@ -677,7 +682,7 @@
             var form = this.findOne(selector);
             var values = {};
             var self = this;
-            [].forEach.call(form.elements, function(element) {
+            [].forEach.call(form.elements, function (element) {
                 var name = element.getAttribute('name');
                 if (name && !values[name]) {
                     values[name] = self.getFieldValue(name, {formSelector: selector});
@@ -714,7 +719,7 @@
                 return false;
             }
 
-            var convertNumberToIntAndPercentToFloat = function (a, def){
+            var convertNumberToIntAndPercentToFloat = function (a, def) {
                 return !!a && !isNaN(a) && parseInt(a, 10) ||
                     !!a && !isNaN(parseFloat(a)) && parseFloat(a) >= 0 &&
                     parseFloat(a) <= 100 && parseFloat(a) / 100 ||
@@ -726,10 +731,11 @@
                     py = convertNumberToIntAndPercentToFloat(y, 0.5);
                 try {
                     var bounds = elem.getBoundingClientRect();
-                    px = Math.floor(bounds.width  * (px - (px ^ 0)).toFixed(10)) + (px ^ 0) + bounds.left;
+                    px = Math.floor(bounds.width * (px - (px ^ 0)).toFixed(10)) + (px ^ 0) + bounds.left;
                     py = Math.floor(bounds.height * (py - (py ^ 0)).toFixed(10)) + (py ^ 0) + bounds.top;
                 } catch (e) {
-                    px = 1; py = 1;
+                    px = 1;
+                    py = 1;
                 }
                 evt.initMouseEvent(type, true, true, window, 1, 1, 1, px, py, false, false, false, false,
                     type !== "contextmenu" ? 0 : 2, elem);
@@ -855,7 +861,7 @@
             }
             try {
                 xhr.send(method === "POST" ? dataString : null);
-            }catch(e){
+            } catch (e) {
                 this.log("name: " + e.name +
                     "message: " + e.message +
                     "lineNumber: " + e.lineNumber +
@@ -946,12 +952,12 @@
                     break;
                 case "select":
                     if (field.multiple) {
-                        [].forEach.call(field.options, function(option) {
+                        [].forEach.call(field.options, function (option) {
                             option.selected = value.indexOf(option.value) !== -1;
                         });
                         // If the values can't be found, try search options text
                         if (field.value === "") {
-                            [].forEach.call(field.options, function(option) {
+                            [].forEach.call(field.options, function (option) {
                                 option.selected = value.indexOf(option.text) !== -1;
                             });
                         }
@@ -965,7 +971,7 @@
 
                         // If the value can't be found, try search options text
                         if (field.value !== value) {
-                            [].some.call(field.options, function(option) {
+                            [].some.call(field.options, function (option) {
                                 option.selected = value === option.text;
                                 return value === option.text;
                             });
@@ -981,7 +987,7 @@
             }
 
             // firing the `change` and `input` events
-            ['change', 'input'].forEach(function(name) {
+            ['change', 'input'].forEach(function (name) {
                 var event = document.createEvent("HTMLEvents");
                 event.initEvent(name, true, true);
                 field.dispatchEvent(event);
@@ -1007,4 +1013,4 @@
             return [].some.call(this.findAll(selector), this.elementVisible);
         };
     };
-})(typeof exports ===  "object" && !(exports instanceof Element) ? exports : window);
+})(typeof exports === "object" && !(exports instanceof Element) ? exports : window);

@@ -17,8 +17,7 @@ public class RestFulResult {
     public RestFulResult() {
     }
 
-    public boolean hasError()
-    {
+    public boolean hasError() {
         return status == 0;
     }
 

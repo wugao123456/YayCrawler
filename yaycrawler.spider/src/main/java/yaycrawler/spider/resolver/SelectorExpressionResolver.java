@@ -60,8 +60,8 @@ public class SelectorExpressionResolver {
                         else {
                             Object object = execute(request, localObject, methodName, paramArray);
                             if (object instanceof Collection) {
-                                Collection tmps = (Collection)object;
-                                for (Object tmp:tmps) {
+                                Collection tmps = (Collection) object;
+                                for (Object tmp : tmps) {
                                     datas.add(tmp);
                                 }
                             } else {

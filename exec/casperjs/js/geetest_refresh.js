@@ -52,7 +52,7 @@ casper.on('remote.message', function (msg) {
 
 var pageUrl = casper.cli.get(0);
 var deltaResolveServer = casper.cli.get(1);
-var id =( new Date()).getTime();
+var id = (new Date()).getTime();
 
 var pageParam = null;
 casper.start(pageUrl).then(function () {
@@ -123,8 +123,7 @@ casper.then(function () {
     if (result != null && result.status == 1) {
         deltaX = result.data.deltaX;
         this.echo("滑块位置求解成功:" + JSON.stringify(result.data));
-    }
-    else {
+    } else {
         this.echo("请求滑块位置失败:" + JSON.stringify(result));
         this.exit();
     }
@@ -186,7 +185,7 @@ casper.then(function () {
     casper.waitForSelectorTextChange('.gt_info_type', function () {
         var status = this.fetchText('.gt_info_type');
         this.echo("验证结果:" + status);
-        this.capture(status.replace(":","_")+ id + "_" + currentTrailIndex + '.png');
+        this.capture(status.replace(":", "_") + id + "_" + currentTrailIndex + '.png');
         if (status.indexOf("通过") > -1) {
             if (this.exists('#verify')) {
                 this.click("#verify");

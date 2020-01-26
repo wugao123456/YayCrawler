@@ -1,9 +1,10 @@
 package yaycrawler.dao.domain;
 
-import com.sun.istack.internal.NotNull;
+
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Set;
 
@@ -173,7 +174,7 @@ public class PageSite implements Serializable {
     }
 
     public Integer getSleepTime() {
-        if(sleepTime == null)
+        if (sleepTime == null)
             return 0;
         else
             return sleepTime;

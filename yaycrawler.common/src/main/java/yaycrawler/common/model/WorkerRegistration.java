@@ -5,19 +5,19 @@ package yaycrawler.common.model;
  */
 public class WorkerRegistration {
 
-    private  String workerId;
+    private String workerId;
     private String workerContextPath;
     private Long heartbeatInteval;
     private int waitTaskCount;
     /**
      * 最后的心跳时间
      */
-    private Long lastHeartbeatTime=0L;
+    private Long lastHeartbeatTime = 0L;
 
     public WorkerRegistration() {
     }
 
-    public WorkerRegistration(String workerId,String workerContextPath) {
+    public WorkerRegistration(String workerId, String workerContextPath) {
         this.workerId = workerId;
         this.workerContextPath = workerContextPath;
     }

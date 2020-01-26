@@ -12,7 +12,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 /**
  * Created by ucs_yuananyun on 2016/5/16.
  */
-public class CrawlerQueueScheduler implements MonitorableScheduler ,Closeable {
+public class CrawlerQueueScheduler implements MonitorableScheduler, Closeable {
     private BlockingQueue<Request> queue = new LinkedBlockingQueue<Request>();
 
 

@@ -45,7 +45,7 @@ public class GlobalExceptionHandler {
             return handleIOException(ex);
         }
 
-        return redirectToErrorPage( message);
+        return redirectToErrorPage(message);
     }
 
 

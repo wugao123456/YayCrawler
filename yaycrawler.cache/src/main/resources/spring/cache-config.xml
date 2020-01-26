@@ -10,8 +10,8 @@
     <!--<cache:annotation-driven cache-manager="cacheManager"/>-->
 
     <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
-        <property name="cacheManager" >
-            <bean  class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+        <property name="cacheManager">
+            <bean class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
                 <property name="configLocation" value="classpath:config/ehcache.xml"/>
             </bean>
         </property>

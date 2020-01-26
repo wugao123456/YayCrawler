@@ -20,10 +20,10 @@ public class WorkerRefreshTask {
         long currentTime = System.currentTimeMillis();
 
         for (WorkerRegistration registration : workerRegistrationMap.values()) {
-            if(registration==null|| registration.getHeartbeatInteval()==null) continue;
+            if (registration == null || registration.getHeartbeatInteval() == null) continue;
             Long lastTime = registration.getLastHeartbeatTime();
-            if(lastTime==null) lastTime = System.currentTimeMillis();
-            if (currentTime - lastTime >=2 * registration.getHeartbeatInteval()) {
+            if (lastTime == null) lastTime = System.currentTimeMillis();
+            if (currentTime - lastTime >= 2 * registration.getHeartbeatInteval()) {
                 logger.info("{}心跳已经超时，Master移除该Worker！", registration.toString());
                 workerRegistrationMap.remove(registration.getWorkerContextPath());
             }

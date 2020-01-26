@@ -22,12 +22,12 @@ import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import java.lang.reflect.Method;
 
 //如果使用redis作为任务队列则启用这两个标注
-@Configuration
-@EnableCaching
+//@Configuration
+//@EnableCaching
 public class RedisConfig extends CachingConfigurerSupport {
 
     @Bean
-    public KeyGenerator wiselyKeyGenerator(){
+    public KeyGenerator wiselyKeyGenerator() {
         return new KeyGenerator() {
             @Override
             public Object generate(Object target, Method method, Object... params) {

@@ -1,9 +1,10 @@
 package yaycrawler.dao.domain;
 
-import com.sun.istack.internal.NotNull;
+
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 /**
  * 表示规则的版本

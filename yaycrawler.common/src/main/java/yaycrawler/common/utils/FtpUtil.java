@@ -82,14 +82,15 @@ public class FtpUtil {
      */
     public static final int SCAN_SECOND = 10;
 
-    public boolean uploadFile(String url,int port,String username, String password, String path, String filename, InputStream input) {logger.info("start uploading file to ftp...");
+    public boolean uploadFile(String url, int port, String username, String password, String path, String filename, InputStream input) {
+        logger.info("start uploading file to ftp...");
         boolean result = false;
         FTPClient ftpClient = null;
         try {
 
             // 创建并登陆ftp服务器
             ftpClient = getFTPClient(url, password, username, port);
-            if(ftpClient == null)
+            if (ftpClient == null)
                 return result;
 
             // 设置ftp上传进度监听器
@@ -136,11 +137,12 @@ public class FtpUtil {
         }
         return result;
     }
+
     /**
      * 将指定远程url的网络文件上传到ftp目录
      *
      * @param remoteStorDir ftp的绝对路径(目录+文件名),这个路径必须以/结尾
-     * @param fileName           文件所在的http的绝对路径
+     * @param fileName      文件所在的http的绝对路径
      * @throws Exception
      * @author zzj
      */
@@ -220,7 +222,7 @@ public class FtpUtil {
             ftpClient = new FTPClient();
 
             logger.info("start connect ftp server.");
-            ftpClient.connect(ftpHost,ftpPort);
+            ftpClient.connect(ftpHost, ftpPort);
 
             //登录到ftp服务器
             ftpClient.login(ftpUserName, ftpPassword);
@@ -235,7 +237,7 @@ public class FtpUtil {
             logger.info("connect and login ftp server success.");
 
             // 设置每次上传的大小
-			/*ftpClient.setBufferSize(UPLOAD_BUFFER_SIZE);*/
+            /*ftpClient.setBufferSize(UPLOAD_BUFFER_SIZE);*/
 
             if (!FTPReply.isPositiveCompletion(ftpClient.getReplyCode())) {
                 logger.info("未连接到FTP，用户名或密码错误。");
@@ -301,25 +303,27 @@ public class FtpUtil {
 
     /**
      * 上传进度监听器（可能导致阻塞）
+     *
      * @return 监听器对象
      * @author zzj
      */
-	public CopyStreamListener createListener() {
-		return new CopyStreamListener() {
-			private long start = System.currentTimeMillis()/1000;
-			@Override
-			public void bytesTransferred(CopyStreamEvent event) {
-				System.out.println("transfeerred");
-				bytesTransferred(event.getTotalBytesTransferred(), event.getBytesTransferred(), event.getStreamSize());
-			}
+    public CopyStreamListener createListener() {
+        return new CopyStreamListener() {
+            private long start = System.currentTimeMillis() / 1000;
 
-			@Override
-			public void bytesTransferred(long totalBytesTransferred, int bytesTransferred, long streamSize) {
-				System.out.println("Spended time: "+(System.currentTimeMillis()/1000-start)+" seconds.");
-				System.out.println("transfered total bytes:" + totalBytesTransferred + ",per transfeerred types:" + bytesTransferred+",stream size="+streamSize);
-			}
-		};
-	}
+            @Override
+            public void bytesTransferred(CopyStreamEvent event) {
+                System.out.println("transfeerred");
+                bytesTransferred(event.getTotalBytesTransferred(), event.getBytesTransferred(), event.getStreamSize());
+            }
+
+            @Override
+            public void bytesTransferred(long totalBytesTransferred, int bytesTransferred, long streamSize) {
+                System.out.println("Spended time: " + (System.currentTimeMillis() / 1000 - start) + " seconds.");
+                System.out.println("transfered total bytes:" + totalBytesTransferred + ",per transfeerred types:" + bytesTransferred + ",stream size=" + streamSize);
+            }
+        };
+    }
 
     /**
      * 创建指定的目录
@@ -350,7 +354,7 @@ public class FtpUtil {
      * 从ftp下载文件
      *
      * @param sourceFtpFileDir 文件所在ftp目录
-     * @param //version          所要取得文件的版本号
+     * @param //version        所要取得文件的版本号
      * @return 下载后的目录名字
      * @throws Exception 异常
      * @author zzj
@@ -387,7 +391,7 @@ public class FtpUtil {
      *
      * @param //ftpClient ftp客户端对象
      * @param //ftpFiles  获取到的所有文件
-     * @param version   版本还
+     * @param version     版本还
      * @return 文件流
      * @throws IOException
      * @author zzj

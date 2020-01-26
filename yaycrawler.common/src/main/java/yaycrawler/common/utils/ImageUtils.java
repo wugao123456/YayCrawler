@@ -18,16 +18,16 @@ public class ImageUtils {
      *
      * @param imgSrcList       图片的地址列表
      * @param topLeftPointList 每张小图片的偏移量
-     * @param countOfLine 每行的小图片个数
+     * @param countOfLine      每行的小图片个数
      * @param cutWidth         每张小图片截取的宽度（像素）
      * @param cutHeight        每张小图片截取的高度（像素）
      * @param savePath         合并后图片的保存路径
-     * @param subfix         合并后图片的后缀
+     * @param subfix           合并后图片的后缀
      * @return 是否合并成功
      */
     public static boolean combineImages(List<String> imgSrcList, List<String[]> topLeftPointList, int countOfLine, int cutWidth, int cutHeight, String savePath, String subfix) {
         if (imgSrcList == null || savePath == null || savePath.trim().length() == 0 || countOfLine == 0) return false;
-        BufferedImage lastImage = new BufferedImage(cutWidth * countOfLine, cutHeight * (int)( Math.floor(imgSrcList.size() *1.0 / countOfLine * 1.0)), BufferedImage.TYPE_INT_RGB);
+        BufferedImage lastImage = new BufferedImage(cutWidth * countOfLine, cutHeight * (int) (Math.floor(imgSrcList.size() * 1.0 / countOfLine * 1.0)), BufferedImage.TYPE_INT_RGB);
         String prevSrc = "";
         BufferedImage prevImage = null;
         try {

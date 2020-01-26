@@ -12,6 +12,7 @@ public interface ICookieProvider {
 
     /**
      * 表示是否支持某个域名获取cookie
+     *
      * @param domain
      * @return
      */

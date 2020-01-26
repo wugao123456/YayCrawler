@@ -14,17 +14,19 @@ import java.util.concurrent.Semaphore;
  */
 public class CasperjsProgramManager {
     private static Logger logger = LoggerFactory.getLogger(CasperjsProgramManager.class);
+
     public static String launch(String jsFileName, List<String> params) {
         return launch(jsFileName, null, params);
     }
-    public static String launch(String jsFileName, String pageCharset,List<String> params) {
+
+    public static String launch(String jsFileName, String pageCharset, List<String> params) {
         if (StringUtils.isBlank(jsFileName)) {
             logger.error("待执行的js文件名不能为空！");
             return null;
         }
         BufferedReader br = null;
         try {
-            if(pageCharset==null) pageCharset = "utf-8";
+            if (pageCharset == null) pageCharset = "utf-8";
             String path = CasperjsProgramManager.class.getResource("/").getPath();
             path = path.substring(1, path.lastIndexOf("/") + 1);
             String os = System.getProperties().getProperty("os.name");
@@ -45,7 +47,7 @@ public class CasperjsProgramManager {
                     processBuilder.command().add(param);
                 }
             }
-            processBuilder.command().add("--output-encoding="+pageCharset);
+            processBuilder.command().add("--output-encoding=" + pageCharset);
             processBuilder.command().add("--web-security=no");
             processBuilder.command().add("--ignore-ssl-errors=true");
 
@@ -67,7 +69,7 @@ public class CasperjsProgramManager {
             logger.error(ex.getMessage());
             return null;
         } finally {
-            if(br != null)
+            if (br != null)
                 try {
                     br.close();
                 } catch (IOException e) {

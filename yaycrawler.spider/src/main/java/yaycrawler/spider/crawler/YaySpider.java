@@ -20,29 +20,28 @@ public class YaySpider extends Spider {
         super(pageProcessor);
         this.pageSiteService = pageSiteService;
         this.site = pageSiteService.getSite(domain);
-        if(site==null) site = Site.me();
+        if (site == null) site = Site.me();
         this.setSpiderListeners(new ArrayList<SpiderListener>());
-        spawnUrl=true;
+        spawnUrl = true;
         this.domain = domain;
     }
 
-    public void setSite(Site site)
-    {
+    public void setSite(Site site) {
         this.site = site;
     }
 
     @Override
     protected void onError(Request request) {
         //失败后换代理重试一次
-        Integer tryTimes= (Integer) request.getExtra("tryTimes");
-        if(tryTimes==null) tryTimes=0;
-        if(tryTimes==0) {
+        Integer tryTimes = (Integer) request.getExtra("tryTimes");
+        if (tryTimes == null) tryTimes = 0;
+        if (tryTimes == 0) {
             //TODO 异常恢复
             this.site = pageSiteService.getSite(domain, true);
             request.putExtra("tryTimes", ++tryTimes);
             request.getExtras().remove("cookieIds");
             this.addRequest(request);
-        }else
+        } else
             super.onError(request);
 
     }

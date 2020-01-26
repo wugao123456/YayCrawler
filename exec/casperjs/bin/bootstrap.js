@@ -44,36 +44,38 @@ if (!('phantom' in this)) {
 // Common polyfills
 
 // cujos bind shim instead of MDN shim, see #1396
-var isFunction = function(o) {
-  return 'function' === typeof o;
+var isFunction = function (o) {
+    return 'function' === typeof o;
 };
 var bind;
 var slice = [].slice;
 var proto = Function.prototype;
 var featureMap = {
-  'function-bind': 'bind'
+    'function-bind': 'bind'
 };
+
 function has(feature) {
-  var prop = featureMap[feature];
-  return isFunction(proto[prop]);
+    var prop = featureMap[feature];
+    return isFunction(proto[prop]);
 }
+
 // check for missing features
 if (!has('function-bind')) {
-  // adapted from Mozilla Developer Network example at
-  // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function/bind
-  bind = function bind(obj) {
-    var args = slice.call(arguments, 1),
-      self = this,
-      nop = function() {
-      },
-      bound = function() {
-        return self.apply(this instanceof nop ? this : (obj || {}), args.concat(slice.call(arguments)));
-      };
-    nop.prototype = this.prototype || {}; // Firefox cries sometimes if prototype is undefined
-    bound.prototype = new nop();
-    return bound;
-  };
-  proto.bind = bind;
+    // adapted from Mozilla Developer Network example at
+    // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function/bind
+    bind = function bind(obj) {
+        var args = slice.call(arguments, 1),
+            self = this,
+            nop = function () {
+            },
+            bound = function () {
+                return self.apply(this instanceof nop ? this : (obj || {}), args.concat(slice.call(arguments)));
+            };
+        nop.prototype = this.prototype || {}; // Firefox cries sometimes if prototype is undefined
+        bound.prototype = new nop();
+        return bound;
+    };
+    proto.bind = bind;
 }
 
 // Custom base error
@@ -86,7 +88,7 @@ var CasperError = function CasperError(msg) {
 CasperError.prototype = Object.getPrototypeOf(new Error());
 
 // casperjs env initialization
-(function(global, phantom, system){
+(function (global, phantom, system) {
     "use strict";
     // phantom args
     var phantomArgs = system.args.slice(1);
@@ -101,8 +103,10 @@ CasperError.prototype = Object.getPrototypeOf(new Error());
         return;
     }
 
-    function __exit(statusCode){
-        setTimeout(function() { phantom.exit(statusCode); }, 0);
+    function __exit(statusCode) {
+        setTimeout(function () {
+            phantom.exit(statusCode);
+        }, 0);
     }
 
     function __die(message) {
@@ -173,7 +177,7 @@ CasperError.prototype = Object.getPrototypeOf(new Error());
             fs.pathJoin = fs.joinPath;
         } else if (!fs.hasOwnProperty('pathJoin')) {
             fs.pathJoin = function pathJoin() {
-                return Array.prototype.filter.call(arguments,function(elm){
+                return Array.prototype.filter.call(arguments, function (elm) {
                     return typeof elm !== "undefined" && elm !== null;
                 }).join('/');
             };
@@ -225,6 +229,7 @@ CasperError.prototype = Object.getPrototypeOf(new Error());
         if (require.patched) {
             return require;
         }
+
         function fromPackageJson(module, dir) {
             var pkgPath, pkgContents, pkg;
             pkgPath = fs.pathJoin(dir, module, 'package.json');
@@ -244,6 +249,7 @@ CasperError.prototype = Object.getPrototypeOf(new Error());
                 return fs.absolute(fs.pathJoin(dir, module, pkg.main));
             }
         }
+
         function resolveFile(path, dir) {
             var extensions = ['js', 'coffee', 'json'];
             var basenames = [path, path + '/index'];
@@ -252,9 +258,9 @@ CasperError.prototype = Object.getPrototypeOf(new Error());
             if (nodejsScript) {
                 return nodejsScript;
             }
-            basenames.forEach(function(basename) {
+            basenames.forEach(function (basename) {
                 paths.push(fs.absolute(fs.pathJoin(dir, basename)));
-                extensions.forEach(function(extension) {
+                extensions.forEach(function (extension) {
                     paths.push(fs.absolute(fs.pathJoin(dir, [basename, extension].join('.'))));
                 });
             });
@@ -265,15 +271,18 @@ CasperError.prototype = Object.getPrototypeOf(new Error());
             }
             return null;
         }
+
         function getCurrentScriptRoot() {
             if ((phantom.casperScriptBaseDir || "").indexOf(fs.workingDirectory) === 0) {
                 return phantom.casperScriptBaseDir;
             }
             return fs.absolute(fs.pathJoin(fs.workingDirectory, phantom.casperScriptBaseDir));
         }
+
         function casperBuiltinPath(path) {
             return resolveFile(path, fs.pathJoin(phantom.casperPath, 'modules'));
         }
+
         function nodeModulePath(path) {
             var resolved, prevBaseDir;
             var baseDir = getCurrentScriptRoot();
@@ -284,15 +293,17 @@ CasperError.prototype = Object.getPrototypeOf(new Error());
             } while (!resolved && baseDir !== '/' && prevBaseDir !== '/' && baseDir !== prevBaseDir);
             return resolved;
         }
+
         function localModulePath(path) {
             return resolveFile(path, phantom.casperScriptBaseDir || fs.workingDirectory);
         }
+
         var patchedRequire = function patchedRequire(path) {
             try {
                 return require(casperBuiltinPath(path) ||
-                               nodeModulePath(path)    ||
-                               localModulePath(path)   ||
-                               path);
+                    nodeModulePath(path) ||
+                    localModulePath(path) ||
+                    path);
             } catch (e) {
                 throw new CasperError("Can't find module " + path);
             }
@@ -367,16 +378,16 @@ CasperError.prototype = Object.getPrototypeOf(new Error());
         } catch (e) {
             throw new CasperError('Cannot read package file contents: ' + e);
         }
-        parts  = pkg.version.trim().split(".");
+        parts = pkg.version.trim().split(".");
         if (parts.length < 3) {
             throw new CasperError("Invalid version number");
         }
         patchPart = parts[2].split('-');
         return {
-            major: ~~parts[0]       || 0,
-            minor: ~~parts[1]       || 0,
-            patch: ~~patchPart[0]   || 0,
-            ident: patchPart[1]     || "",
+            major: ~~parts[0] || 0,
+            minor: ~~parts[1] || 0,
+            patch: ~~patchPart[0] || 0,
+            ident: patchPart[1] || "",
             toString: function toString() {
                 var version = [this.major, this.minor, this.patch].join('.');
                 if (this.ident) {
@@ -396,7 +407,9 @@ CasperError.prototype = Object.getPrototypeOf(new Error());
         global.require = patchRequire(global.require);
     } else {
         // declare a dummy patchRequire function
-        global.patchRequire = function(req) {return req;};
+        global.patchRequire = function (req) {
+            return req;
+        };
         require.paths.push(fs.pathJoin(phantom.casperPath, 'modules'));
         require.paths.push(fs.workingDirectory);
     }
@@ -419,7 +432,7 @@ CasperError.prototype = Object.getPrototypeOf(new Error());
         } else {
             require.paths.push(fs.pathJoin(fs.workingDirectory, phantom.casperScriptBaseDir));
         }
-        require.paths.push(fs.pathJoin(require.paths[require.paths.length-1], 'node_modules'));
+        require.paths.push(fs.pathJoin(require.paths[require.paths.length - 1], 'node_modules'));
     }
 
     // casper loading status flag
@@ -427,7 +440,7 @@ CasperError.prototype = Object.getPrototypeOf(new Error());
     if (phantom.version.major === 2
         && phantom.casperScript
         && phantom.casperScript.split('.').pop() === 'coffee'
-        ) {
+    ) {
         return __terminate('CoffeeScript is not supported by PhantomJS > 2.');
     }
 

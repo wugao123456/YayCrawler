@@ -41,6 +41,7 @@ function AssertionError(msg, result) {
     this.name = 'AssertionError';
     this.result = result;
 }
+
 AssertionError.prototype = new Error();
 exports.AssertionError = AssertionError;
 
@@ -50,6 +51,7 @@ function TerminationError(msg) {
     this.message = msg;
     this.name = 'TerminationError';
 }
+
 TerminationError.prototype = new Error();
 exports.TerminationError = TerminationError;
 
@@ -59,6 +61,7 @@ function TimedOutError(msg) {
     this.message = msg;
     this.name = 'TimedOutError';
 }
+
 TimedOutError.prototype = new Error();
 exports.TimedOutError = TimedOutError;
 
@@ -105,16 +108,16 @@ var Tester = function Tester(casper, options) {
     this.lastAssertTime = 0;
     this.loadIncludes = {
         includes: [],
-        pre:      [],
-        post:     []
+        pre: [],
+        post: []
     };
     this.options = utils.mergeObjects({
-        concise:  false,  // concise output?
+        concise: false,  // concise output?
         failFast: false,  // terminates a suite as soon as a test fails?
         failText: "FAIL", // text to use for a failed test
         passText: "PASS", // text to use for a succesful test
         skipText: "SKIP", // text to use for a skipped test
-        pad:      80    , // maximum number of chars for a result line
+        pad: 80, // maximum number of chars for a result line
         warnText: "WARN"  // text to use for a dubious test
     }, options);
     this.queue = [];
@@ -153,7 +156,7 @@ var Tester = function Tester(casper, options) {
         if (!failure.values || valueKeys.length === 0) {
             return;
         }
-        valueKeys.forEach(function(name) {
+        valueKeys.forEach(function (name) {
             this.comment(f('   %s: %s', name, utils.formatTestValue(failure.values[name], name)));
         }.bind(this));
         // check for fast failing
@@ -173,10 +176,11 @@ var Tester = function Tester(casper, options) {
         }
         var line = 0;
         try {
-            line = (backtrace || []).filter(function(entry) {
+            line = (backtrace || []).filter(function (entry) {
                 return self.currentTestFile === entry.file;
             })[0].line;
-        } catch (e) {}
+        } catch (e) {
+        }
         self.uncaughtError(error, self.currentTestFile, line, backtrace);
     }
 
@@ -195,13 +199,13 @@ var Tester = function Tester(casper, options) {
         'waitFor.timeout.error',
         'event.error',
         'complete.error'
-    ].forEach(function(event) {
+    ].forEach(function (event) {
         self.casper.on(event, errorHandlerAndDone);
     });
 
     self.casper.on('step.error', errorHandler);
 
-    this.casper.on('warn', function(warning) {
+    this.casper.on('warn', function (warning) {
         if (self.currentSuite) {
             self.currentSuite.addWarning(warning);
         }
@@ -228,23 +232,17 @@ var Tester = function Tester(casper, options) {
 
         if (details.selector) {
             message = f(details.waitWhile ? '"%s" never went away in %dms' : '"%s" still did not exist in %dms', details.selector, timeout);
-        }
-        else if (details.visible) {
+        } else if (details.visible) {
             message = f(details.waitWhile ? '"%s" never disappeared in %dms' : '"%s" never appeared in %dms', details.visible, timeout);
-        }
-        else if (details.url || details.resource) {
+        } else if (details.url || details.resource) {
             message = f('%s did not load in %dms', details.url || details.resource, timeout);
-        }
-        else if (details.popup) {
+        } else if (details.popup) {
             message = f('%s did not pop up in %dms', details.popup, timeout);
-        }
-        else if (details.text) {
+        } else if (details.text) {
             message = f('"%s" did not appear in the page in %dms', details.text, timeout);
-        }
-        else if (details.selectorTextChange) {
+        } else if (details.selectorTextChange) {
             message = f('"%s" did not have a text change in %dms', details.selectorTextChange, timeout);
-        }
-        else if (utils.isFunction(details.testFx)) {
+        } else if (utils.isFunction(details.testFx)) {
             message = f('"%s" did not evaluate to something truthy in %dms', details.testFx.toString(), timeout);
         }
 
@@ -352,25 +350,25 @@ Tester.prototype.skipIfEngine = function skipIfEngine(nb, skipSpec) {
  * @throws AssertionError in case the test failed
  */
 Tester.prototype.assert =
-Tester.prototype.assertTrue = function assert(subject, message, context) {
-    "use strict";
-    this.executed++;
-    var result = utils.mergeObjects({
-        success: subject === true,
-        type: "assert",
-        standard: "Subject is strictly true",
-        message: message,
-        file: this.currentTestFile,
-        doThrow: true,
-        values: {
-            subject: utils.getPropertyPath(context, 'values.subject') || subject
+    Tester.prototype.assertTrue = function assert(subject, message, context) {
+        "use strict";
+        this.executed++;
+        var result = utils.mergeObjects({
+            success: subject === true,
+            type: "assert",
+            standard: "Subject is strictly true",
+            message: message,
+            file: this.currentTestFile,
+            doThrow: true,
+            values: {
+                subject: utils.getPropertyPath(context, 'values.subject') || subject
+            }
+        }, context || {});
+        if (!result.success && result.doThrow) {
+            throw new AssertionError(message || result.standard, result);
         }
-    }, context || {});
-    if (!result.success && result.doThrow) {
-        throw new AssertionError(message || result.standard, result);
-    }
-    return this.processAssertionResult(result);
-};
+        return this.processAssertionResult(result);
+    };
 
 /**
  * Asserts that two values are strictly equals.
@@ -381,17 +379,17 @@ Tester.prototype.assertTrue = function assert(subject, message, context) {
  * @return Object            An assertion result object
  */
 Tester.prototype.assertEquals =
-Tester.prototype.assertEqual = function assertEquals(subject, expected, message) {
-    "use strict";
-    return this.assert(utils.equals(subject, expected), message, {
-        type: "assertEquals",
-        standard: "Subject equals the expected value",
-        values: {
-            subject:  subject,
-            expected: expected
-        }
-    });
-};
+    Tester.prototype.assertEqual = function assertEquals(subject, expected, message) {
+        "use strict";
+        return this.assert(utils.equals(subject, expected), message, {
+            type: "assertEquals",
+            standard: "Subject equals the expected value",
+            values: {
+                subject: subject,
+                expected: expected
+            }
+        });
+    };
 
 /**
  * Asserts that two values are strictly not equals.
@@ -407,7 +405,7 @@ Tester.prototype.assertNotEquals = function assertNotEquals(subject, shouldnt, m
         type: "assertNotEquals",
         standard: "Subject doesn't equal what it shouldn't be",
         values: {
-            subject:  subject,
+            subject: subject,
             shouldnt: shouldnt
         }
     });
@@ -426,7 +424,7 @@ Tester.prototype.assertElementCount = function assertElementCount(selector, coun
     if (!utils.isNumber(count) || count < 0) {
         throw new CasperError('assertElementCount() needs a positive integer count');
     }
-    var elementCount = this.casper.evaluate(function(selector) {
+    var elementCount = this.casper.evaluate(function (selector) {
         try {
             return __utils__.findAll(selector).length;
         } catch (e) {
@@ -436,9 +434,9 @@ Tester.prototype.assertElementCount = function assertElementCount(selector, coun
     return this.assert(elementCount === count, message, {
         type: "assertElementCount",
         standard: f('%d element%s matching selector "%s" found',
-                    count,
-                    count > 1 ? 's' : '',
-                    selector),
+            count,
+            count > 1 ? 's' : '',
+            selector),
         values: {
             selector: selector,
             expected: count,
@@ -457,17 +455,17 @@ Tester.prototype.assertElementCount = function assertElementCount(selector, coun
  * @return Object             An assertion result object
  */
 Tester.prototype.assertEval =
-Tester.prototype.assertEvaluate = function assertEval(fn, message, params) {
-    "use strict";
-    return this.assert(this.casper.evaluate(fn, params), message, {
-        type: "assertEval",
-        standard: "Evaluated function returns true",
-        values: {
-            fn: fn,
-            params: params
-        }
-    });
-};
+    Tester.prototype.assertEvaluate = function assertEval(fn, message, params) {
+        "use strict";
+        return this.assert(this.casper.evaluate(fn, params), message, {
+            type: "assertEval",
+            standard: "Evaluated function returns true",
+            values: {
+                fn: fn,
+                params: params
+            }
+        });
+    };
 
 /**
  * Asserts that the result of a code evaluation in remote DOM equals
@@ -481,32 +479,32 @@ Tester.prototype.assertEvaluate = function assertEval(fn, message, params) {
  * @return Object                 An assertion result object
  */
 Tester.prototype.assertEvalEquals =
-Tester.prototype.assertEvalEqual = function assertEvalEquals(fn, expected, message, params) {
-    "use strict";
-    var subject = this.casper.evaluate(fn, params);
-    return this.assert(utils.equals(subject, expected), message, {
-        type: "assertEvalEquals",
-        standard: "Evaluated function returns the expected value",
-        values: {
-            fn: fn,
-            params: params,
-            subject:  subject,
-            expected: expected
-        }
-    });
-};
+    Tester.prototype.assertEvalEqual = function assertEvalEquals(fn, expected, message, params) {
+        "use strict";
+        var subject = this.casper.evaluate(fn, params);
+        return this.assert(utils.equals(subject, expected), message, {
+            type: "assertEvalEquals",
+            standard: "Evaluated function returns the expected value",
+            values: {
+                fn: fn,
+                params: params,
+                subject: subject,
+                expected: expected
+            }
+        });
+    };
 
 function baseFieldAssert(inputName, expected, actual, message) {
     "use strict";
 
-    return this.assert(utils.equals(actual, expected),  message, {
+    return this.assert(utils.equals(actual, expected), message, {
         type: 'assertField',
         standard: f('"%s" input field has the value "%s"', inputName, expected),
         values: {
             inputName: inputName,
             actual: actual,
             expected: expected
-         }
+        }
     });
 }
 
@@ -556,7 +554,7 @@ Tester.prototype.assertField = function assertField(input, expected, message, op
         }
     }
 
-    var actual = this.casper.evaluate(function(inputName, options) {
+    var actual = this.casper.evaluate(function (inputName, options) {
         return __utils__.getFieldValue(inputName, options);
     }, input, options);
 
@@ -573,7 +571,7 @@ Tester.prototype.assertField = function assertField(input, expected, message, op
  */
 Tester.prototype.assertFieldCSS = function assertFieldCSS(cssSelector, expected, message) {
     "use strict";
-    var actual = this.casper.evaluate(function(inputName, cssSelector) {
+    var actual = this.casper.evaluate(function (inputName, cssSelector) {
         return __utils__.getFieldValue(inputName, {inputSelector: cssSelector});
     }, null, cssSelector);
 
@@ -590,7 +588,7 @@ Tester.prototype.assertFieldCSS = function assertFieldCSS(cssSelector, expected,
  */
 Tester.prototype.assertFieldXPath = function assertFieldXPath(xPathSelector, expected, message) {
     "use strict";
-    var actual = this.casper.evaluate(function(inputName, xPathSelector) {
+    var actual = this.casper.evaluate(function (inputName, xPathSelector) {
         return __utils__.getFieldValue(inputName, {inputXPath: xPathSelector});
     }, null, xPathSelector);
 
@@ -606,18 +604,18 @@ Tester.prototype.assertFieldXPath = function assertFieldXPath(xPathSelector, exp
  * @return Object             An assertion result object
  */
 Tester.prototype.assertExists =
-Tester.prototype.assertExist =
-Tester.prototype.assertSelectorExists =
-Tester.prototype.assertSelectorExist = function assertExists(selector, message) {
-    "use strict";
-    return this.assert(this.casper.exists(selector), message, {
-        type: "assertExists",
-        standard: f("Find an element matching: %s", selector),
-        values: {
-            selector: selector
-        }
-    });
-};
+    Tester.prototype.assertExist =
+        Tester.prototype.assertSelectorExists =
+            Tester.prototype.assertSelectorExist = function assertExists(selector, message) {
+                "use strict";
+                return this.assert(this.casper.exists(selector), message, {
+                    type: "assertExists",
+                    standard: f("Find an element matching: %s", selector),
+                    values: {
+                        selector: selector
+                    }
+                });
+            };
 
 /**
  * Asserts that an element matching the provided selector expression does not
@@ -628,16 +626,16 @@ Tester.prototype.assertSelectorExist = function assertExists(selector, message) 
  * @return Object             An assertion result object
  */
 Tester.prototype.assertDoesntExist =
-Tester.prototype.assertNotExists = function assertDoesntExist(selector, message) {
-    "use strict";
-    return this.assert(!this.casper.exists(selector), message, {
-        type: "assertDoesntExist",
-        standard: f("Fail to find element matching selector: %s", selector),
-        values: {
-            selector: selector
-        }
-    });
-};
+    Tester.prototype.assertNotExists = function assertDoesntExist(selector, message) {
+        "use strict";
+        return this.assert(!this.casper.exists(selector), message, {
+            type: "assertDoesntExist",
+            standard: f("Fail to find element matching selector: %s", selector),
+            values: {
+                selector: selector
+            }
+        });
+    };
 
 /**
  * Asserts that current HTTP status is the one passed as argument.
@@ -668,20 +666,20 @@ Tester.prototype.assertHttpStatus = function assertHttpStatus(status, message) {
  * @return Object            An assertion result object
  */
 Tester.prototype.assertMatch =
-Tester.prototype.assertMatches = function assertMatch(subject, pattern, message) {
-    "use strict";
-    if (utils.betterTypeOf(pattern) !== "regexp") {
-        throw new CasperError('Invalid regexp.');
-    }
-    return this.assert(pattern.test(subject), message, {
-        type: "assertMatch",
-        standard: "Subject matches the provided pattern",
-        values:  {
-            subject: subject,
-            pattern: pattern.toString()
+    Tester.prototype.assertMatches = function assertMatch(subject, pattern, message) {
+        "use strict";
+        if (utils.betterTypeOf(pattern) !== "regexp") {
+            throw new CasperError('Invalid regexp.');
         }
-    });
-};
+        return this.assert(pattern.test(subject), message, {
+            type: "assertMatch",
+            standard: "Subject matches the provided pattern",
+            values: {
+                subject: subject,
+                pattern: pattern.toString()
+            }
+        });
+    };
 
 /**
  * Asserts a condition resolves to false.
@@ -691,16 +689,16 @@ Tester.prototype.assertMatches = function assertMatch(subject, pattern, message)
  * @return Object              An assertion result object
  */
 Tester.prototype.assertNot =
-Tester.prototype.assertFalse = function assertNot(condition, message) {
-    "use strict";
-    return this.assert(!condition, message, {
-        type: "assertNot",
-        standard: "Subject is falsy",
-        values: {
-            condition: condition
-        }
-    });
-};
+    Tester.prototype.assertFalse = function assertNot(condition, message) {
+        "use strict";
+        return this.assert(!condition, message, {
+            type: "assertNot",
+            standard: "Subject is falsy",
+            values: {
+                condition: condition
+            }
+        });
+    };
 
 /**
  * Asserts that a selector expression is not currently visible.
@@ -710,16 +708,16 @@ Tester.prototype.assertFalse = function assertNot(condition, message) {
  * @return Object            An assertion result object
  */
 Tester.prototype.assertNotVisible =
-Tester.prototype.assertInvisible = function assertNotVisible(selector, message) {
-    "use strict";
-    return this.assert(!this.casper.visible(selector), message, {
-        type: "assertNotVisible",
-        standard: "Selector is not visible",
-        values: {
-            selector: selector
-        }
-    });
-};
+    Tester.prototype.assertInvisible = function assertNotVisible(selector, message) {
+        "use strict";
+        return this.assert(!this.casper.visible(selector), message, {
+            type: "assertNotVisible",
+            standard: "Selector is not visible",
+            values: {
+                selector: selector
+            }
+        });
+    };
 
 /**
  * Asserts that the provided function called with the given parameters
@@ -731,25 +729,25 @@ Tester.prototype.assertInvisible = function assertNotVisible(selector, message) 
  * @return Object             An assertion result object
  */
 Tester.prototype.assertRaises =
-Tester.prototype.assertRaise =
-Tester.prototype.assertThrows = function assertRaises(fn, args, message) {
-    "use strict";
-    var error, thrown = false, context = {
-        type: "assertRaises",
-        standard: "Function raises an error"
-    };
-    try {
-        fn.apply(null, args);
-    } catch (err) {
-        thrown = true;
-        error = err;
-    }
-    this.assert(thrown, message, utils.mergeObjects(context, {
-        values: {
-            error: error
-        }
-    }));
-};
+    Tester.prototype.assertRaise =
+        Tester.prototype.assertThrows = function assertRaises(fn, args, message) {
+            "use strict";
+            var error, thrown = false, context = {
+                type: "assertRaises",
+                standard: "Function raises an error"
+            };
+            try {
+                fn.apply(null, args);
+            } catch (err) {
+                thrown = true;
+                error = err;
+            }
+            this.assert(thrown, message, utils.mergeObjects(context, {
+                values: {
+                    error: error
+                }
+            }));
+        };
 
 /**
  * Asserts that the current page has a resource that matches the provided test
@@ -759,16 +757,16 @@ Tester.prototype.assertThrows = function assertRaises(fn, args, message) {
  * @return Object                    An assertion result object
  */
 Tester.prototype.assertResourceExists =
-Tester.prototype.assertResourceExist = function assertResourceExists(test, message) {
-    "use strict";
-    return this.assert(this.casper.resourceExists(test), message, {
-        type: "assertResourceExists",
-        standard: "Confirm page has resource",
-        values: {
-            test: test
-        }
-    });
-};
+    Tester.prototype.assertResourceExist = function assertResourceExists(test, message) {
+        "use strict";
+        return this.assert(this.casper.resourceExists(test), message, {
+            type: "assertResourceExists",
+            standard: "Confirm page has resource",
+            values: {
+                test: test
+            }
+        });
+    };
 
 /**
  * Asserts that given text doesn't exist in the document body.
@@ -778,19 +776,19 @@ Tester.prototype.assertResourceExist = function assertResourceExists(test, messa
  * @return Object           An assertion result object
  */
 Tester.prototype.assertTextDoesntExist =
-Tester.prototype.assertTextDoesntExist = function assertTextDoesntExist(text, message) {
-    "use strict";
-    var textFound = (this.casper.evaluate(function _evaluate() {
-        return document.body.textContent || document.body.innerText;
-    }).indexOf(text) === -1);
-    return this.assert(textFound, message, {
-        type: "assertTextDoesntExists",
-        standard: "Text doesn't exist within the document body",
-        values: {
-            text: text
-        }
-    });
-};
+    Tester.prototype.assertTextDoesntExist = function assertTextDoesntExist(text, message) {
+        "use strict";
+        var textFound = (this.casper.evaluate(function _evaluate() {
+            return document.body.textContent || document.body.innerText;
+        }).indexOf(text) === -1);
+        return this.assert(textFound, message, {
+            type: "assertTextDoesntExists",
+            standard: "Text doesn't exist within the document body",
+            values: {
+                text: text
+            }
+        });
+    };
 
 /**
  * Asserts that given text exists in the document body.
@@ -800,19 +798,19 @@ Tester.prototype.assertTextDoesntExist = function assertTextDoesntExist(text, me
  * @return Object           An assertion result object
  */
 Tester.prototype.assertTextExists =
-Tester.prototype.assertTextExist = function assertTextExists(text, message) {
-    "use strict";
-    var textFound = (this.casper.evaluate(function _evaluate() {
-        return document.body.textContent || document.body.innerText;
-    }).indexOf(text) !== -1);
-    return this.assert(textFound, message, {
-        type: "assertTextExists",
-        standard: "Find text within the document body",
-        values: {
-            text: text
-        }
-    });
-};
+    Tester.prototype.assertTextExist = function assertTextExists(text, message) {
+        "use strict";
+        var textFound = (this.casper.evaluate(function _evaluate() {
+            return document.body.textContent || document.body.innerText;
+        }).indexOf(text) !== -1);
+        return this.assert(textFound, message, {
+            type: "assertTextExists",
+            standard: "Find text within the document body",
+            values: {
+                text: text
+            }
+        });
+    };
 
 /**
  * Asserts a subject is truthy.
@@ -861,20 +859,20 @@ Tester.prototype.assertFalsy = function assertFalsy(subject, message) {
  * @return Object             An assertion result object
  */
 Tester.prototype.assertSelectorHasText =
-Tester.prototype.assertSelectorContains = function assertSelectorHasText(selector, text, message) {
-    "use strict";
-    var got = this.casper.fetchText(selector);
-    var textFound = got.indexOf(text) !== -1;
-    return this.assert(textFound, message, {
-        type: "assertSelectorHasText",
-        standard: f('Find "%s" within the selector "%s"', text, selector),
-        values: {
-            selector: selector,
-            text: text,
-            actualContent: got
-        }
-    });
-};
+    Tester.prototype.assertSelectorContains = function assertSelectorHasText(selector, text, message) {
+        "use strict";
+        var got = this.casper.fetchText(selector);
+        var textFound = got.indexOf(text) !== -1;
+        return this.assert(textFound, message, {
+            type: "assertSelectorHasText",
+            standard: f('Find "%s" within the selector "%s"', text, selector),
+            values: {
+                selector: selector,
+                text: text,
+                actualContent: got
+            }
+        });
+    };
 
 /**
  * Asserts that given text does not exist in the provided selector.
@@ -885,18 +883,18 @@ Tester.prototype.assertSelectorContains = function assertSelectorHasText(selecto
  * @return Object             An assertion result object
  */
 Tester.prototype.assertSelectorDoesntHaveText =
-Tester.prototype.assertSelectorDoesntContain = function assertSelectorDoesntHaveText(selector, text, message) {
-    "use strict";
-    var textFound = this.casper.fetchText(selector).indexOf(text) === -1;
-    return this.assert(textFound, message, {
-        type: "assertSelectorDoesntHaveText",
-        standard: f('Did not find "%s" within the selector "%s"', text, selector),
-        values: {
-            selector: selector,
-            text: text
-        }
-    });
-};
+    Tester.prototype.assertSelectorDoesntContain = function assertSelectorDoesntHaveText(selector, text, message) {
+        "use strict";
+        var textFound = this.casper.fetchText(selector).indexOf(text) === -1;
+        return this.assert(textFound, message, {
+            type: "assertSelectorDoesntHaveText",
+            standard: f('Did not find "%s" within the selector "%s"', text, selector),
+            values: {
+                selector: selector,
+                text: text
+            }
+        });
+    };
 
 /**
  * Asserts that title of the remote page equals to the expected one.
@@ -926,21 +924,21 @@ Tester.prototype.assertTitle = function assertTitle(expected, message) {
  * @return Object           An assertion result object
  */
 Tester.prototype.assertTitleMatch =
-Tester.prototype.assertTitleMatches = function assertTitleMatch(pattern, message) {
-    "use strict";
-    if (utils.betterTypeOf(pattern) !== "regexp") {
-        throw new CasperError('Invalid regexp.');
-    }
-    var currentTitle = this.casper.getTitle();
-    return this.assert(pattern.test(currentTitle), message, {
-        type: "assertTitle",
-        details: "Page title does not match the provided pattern",
-        values: {
-            subject: currentTitle,
-            pattern: pattern.toString()
+    Tester.prototype.assertTitleMatches = function assertTitleMatch(pattern, message) {
+        "use strict";
+        if (utils.betterTypeOf(pattern) !== "regexp") {
+            throw new CasperError('Invalid regexp.');
         }
-    });
-};
+        var currentTitle = this.casper.getTitle();
+        return this.assert(pattern.test(currentTitle), message, {
+            type: "assertTitle",
+            details: "Page title does not match the provided pattern",
+            values: {
+                subject: currentTitle,
+                pattern: pattern.toString()
+            }
+        });
+    };
 
 /**
  * Asserts that the provided subject is of the given type.
@@ -997,27 +995,27 @@ Tester.prototype.assertInstanceOf = function assertInstanceOf(subject, construct
  * @return Object                  An assertion result object
  */
 Tester.prototype.assertUrlMatch =
-Tester.prototype.assertUrlMatches = function assertUrlMatch(pattern, message) {
-    "use strict";
-    var currentUrl = this.casper.getCurrentUrl(),
-        patternType = utils.betterTypeOf(pattern),
-        result;
-    if (patternType === "regexp") {
-        result = pattern.test(currentUrl);
-    } else if (patternType === "string") {
-        result = currentUrl.indexOf(pattern) !== -1;
-    } else {
-        throw new CasperError("assertUrlMatch() only accepts strings or regexps");
-    }
-    return this.assert(result, message, {
-        type: "assertUrlMatch",
-        standard: "Current url matches the provided pattern",
-        values: {
-            currentUrl: currentUrl,
-            pattern: pattern.toString()
+    Tester.prototype.assertUrlMatches = function assertUrlMatch(pattern, message) {
+        "use strict";
+        var currentUrl = this.casper.getCurrentUrl(),
+            patternType = utils.betterTypeOf(pattern),
+            result;
+        if (patternType === "regexp") {
+            result = pattern.test(currentUrl);
+        } else if (patternType === "string") {
+            result = currentUrl.indexOf(pattern) !== -1;
+        } else {
+            throw new CasperError("assertUrlMatch() only accepts strings or regexps");
         }
-    });
-};
+        return this.assert(result, message, {
+            type: "assertUrlMatch",
+            standard: "Current url matches the provided pattern",
+            values: {
+                currentUrl: currentUrl,
+                pattern: pattern.toString()
+            }
+        });
+    };
 
 /**
  * Asserts that a selector expression is currently visible.
@@ -1081,8 +1079,10 @@ Tester.prototype.begin = function begin() {
 
     function getConfig(args) {
         var config = {
-            setUp: function(){},
-            tearDown: function(){}
+            setUp: function () {
+            },
+            tearDown: function () {
+            }
         };
 
         if (utils.isFunction(args[1])) {
@@ -1107,15 +1107,15 @@ Tester.prototype.begin = function begin() {
 
     var description = arguments[0] || f("Untitled suite in %s", this.currentTestFile),
         config = getConfig([].slice.call(arguments)),
-        next = function() {
+        next = function () {
             config.test(this, this.casper);
             if (!this.options.concise) {
                 this.casper.echo([
                     this.colorize('PASS', 'INFO'),
                     this.formatMessage(description),
                     this.colorize(f('(%d test%s)',
-                                    config.planned,
-                                    config.planned > 1 ? 's' : ''), 'INFO')
+                        config.planned,
+                        config.planned > 1 ? 's' : ''), 'INFO')
                 ].join(' '));
             }
         }.bind(this);
@@ -1196,7 +1196,7 @@ Tester.prototype.done = function done() {
         }
     }
 
-    var next = function() {
+    var next = function () {
         if (this.currentSuite && this.currentSuite.planned &&
             this.currentSuite.planned !== this.executed + this.currentSuite.skipped &&
             !this.currentSuite.failed) {
@@ -1249,8 +1249,8 @@ Tester.prototype.dubious = function dubious(planned, executed, suite) {
     this.casper.warn(message);
     if (!this.currentSuite) return;
     this.currentSuite.addFailure({
-        type:     "dubious",
-        file:     this.currentTestFile,
+        type: "dubious",
+        file: this.currentTestFile,
         standard: message
     });
 };
@@ -1276,7 +1276,7 @@ Tester.prototype.exec = function exec(file) {
     file = this.filter('exec.file', file) || file;
     if (!fs.isFile(file) || !utils.isJsFile(file)) {
         var e = new CasperError(f("Cannot exec %s: can only exec() files with .js or .coffee extensions",
-                                  file));
+            file));
         e.fileName = e.file = e.sourceURL = file;
         throw e;
     }
@@ -1294,7 +1294,7 @@ Tester.prototype.fail = function fail(message, context) {
     "use strict";
     context = context || {};
     return this.assert(false, message, utils.mergeObjects({
-        type:    "fail",
+        type: "fail",
         standard: "explicit call to fail()"
     }, context));
 };
@@ -1368,7 +1368,7 @@ Tester.prototype.info = function info(message) {
 Tester.prototype.pass = function pass(message) {
     "use strict";
     return this.assert(true, message, {
-        type:    "pass",
+        type: "pass",
         standard: "explicit call to pass()"
     });
 };
@@ -1378,12 +1378,12 @@ function getStackEntry(error, testFile) {
     if ("stackArray" in error) {
         // PhantomJS has changed the API of the Error object :-/
         // https://github.com/ariya/phantomjs/commit/c9cf14f221f58a3daf585c47313da6fced0276bc
-        return error.stackArray.filter(function(entry) {
+        return error.stackArray.filter(function (entry) {
             return testFile === entry.sourceURL;
         })[0];
     }
 
-    if (! ('stack' in error))
+    if (!('stack' in error))
         return null;
 
     var r = /\r?\n\s*(.*?)(at |@)([^:]*?):(\d+):?(\d*)/g;
@@ -1394,7 +1394,7 @@ function getStackEntry(error, testFile) {
             sourceURL = sourceURL.split('->')[1].trim();
         }
         if (sourceURL === testFile) {
-            return { sourceURL: sourceURL, line: m[4], column: m[5]};
+            return {sourceURL: sourceURL, line: m[4], column: m[5]};
         }
     }
     return null;
@@ -1405,19 +1405,21 @@ function getStackEntry(error, testFile) {
  *
  * @param  AssertionError  error
  */
-Tester.prototype.processAssertionError = function(error) {
+Tester.prototype.processAssertionError = function (error) {
     "use strict";
     var result = error && error.result || {},
         testFile = this.currentTestFile,
         stackEntry;
     try {
         stackEntry = getStackEntry(error, testFile);
-    } catch (e) {}
+    } catch (e) {
+    }
     if (stackEntry) {
         result.line = stackEntry.line;
         try {
             result.lineContents = fs.read(this.currentTestFile).split('\n')[result.line - 1].trim();
-        } catch (e) {}
+        } catch (e) {
+        }
     }
     return this.processAssertionResult(result);
 };
@@ -1516,7 +1518,7 @@ Tester.prototype.renderFailureDetails = function renderFailureDetails() {
     }
     var failures = this.suiteResults.getAllFailures();
     this.casper.echo(f("\nDetails for the %d failed test%s:\n",
-                       failures.length, failures.length > 1 ? "s" : ""), "PARAMETER");
+        failures.length, failures.length > 1 ? "s" : ""), "PARAMETER");
     failures.forEach(function _forEach(failure) {
         this.casper.echo(f('In %s%s', failure.file, ~~failure.line ? ':' + ~~failure.line : ''));
         if (failure.suite) {
@@ -1559,14 +1561,14 @@ Tester.prototype.renderResults = function renderResults(exit, status, save) {
             style = 'GREEN_BAR';
         }
         result = f('%s %d test%s executed in %ss, %d passed, %d failed, %d dubious, %d skipped.',
-                   statusText,
-                   total,
-                   total > 1 ? "s" : "",
-                   utils.ms2seconds(this.suiteResults.calculateDuration()),
-                   this.suiteResults.countPassed(),
-                   failed,
-                   this.suiteResults.countDubious(),
-                   this.suiteResults.countSkipped());
+            statusText,
+            total,
+            total > 1 ? "s" : "",
+            utils.ms2seconds(this.suiteResults.calculateDuration()),
+            this.suiteResults.countPassed(),
+            failed,
+            this.suiteResults.countDubious(),
+            this.suiteResults.countSkipped());
     }
     this.casper.echo(result, style, this.options.pad);
     this.renderFailureDetails();
@@ -1610,7 +1612,7 @@ Tester.prototype.runSuites = function runSuites() {
     });
     if (testFiles.length === 0) {
         this.bar(f("No test file found in %s, terminating.",
-                   Array.prototype.slice.call(arguments)), "RED_BAR");
+            Array.prototype.slice.call(arguments)), "RED_BAR");
         this.casper.exit(1);
     }
     self.currentSuiteNum = 0;
@@ -1647,7 +1649,7 @@ Tester.prototype.runTest = function runTest(testFile) {
  * Terminates current suite.
  *
  */
-Tester.prototype.terminate = function(message) {
+Tester.prototype.terminate = function (message) {
     "use strict";
     if (message) {
         this.casper.warn(message);
@@ -1715,7 +1717,9 @@ Tester.prototype.uncaughtError = function uncaughtError(error, file, line, backt
  * Test suites array.
  *
  */
-function TestSuiteResult() {}
+function TestSuiteResult() {
+}
+
 TestSuiteResult.prototype = [];
 exports.TestSuiteResult = TestSuiteResult;
 
@@ -1736,9 +1740,9 @@ TestSuiteResult.prototype.countTotal = function countTotal() {
  */
 TestSuiteResult.prototype.countDubious = function countDubious() {
     "use strict";
-    return this.map(function(result) {
+    return this.map(function (result) {
         return result.dubious;
-    }).reduce(function(a, b) {
+    }).reduce(function (a, b) {
         return a + b;
     }, 0);
 };
@@ -1760,9 +1764,9 @@ TestSuiteResult.prototype.countExecuted = function countTotal() {
  */
 TestSuiteResult.prototype.countErrors = function countErrors() {
     "use strict";
-    return this.map(function(result) {
+    return this.map(function (result) {
         return result.crashed;
-    }).reduce(function(a, b) {
+    }).reduce(function (a, b) {
         return a + b;
     }, 0);
 };
@@ -1774,9 +1778,9 @@ TestSuiteResult.prototype.countErrors = function countErrors() {
  */
 TestSuiteResult.prototype.countFailed = function countFailed() {
     "use strict";
-    return this.map(function(result) {
+    return this.map(function (result) {
         return result.failed - result.dubious;
-    }).reduce(function(a, b) {
+    }).reduce(function (a, b) {
         return a + b;
     }, 0);
 };
@@ -1788,9 +1792,9 @@ TestSuiteResult.prototype.countFailed = function countFailed() {
  */
 TestSuiteResult.prototype.countPassed = function countPassed() {
     "use strict";
-    return this.map(function(result) {
+    return this.map(function (result) {
         return result.passed;
-    }).reduce(function(a, b) {
+    }).reduce(function (a, b) {
         return a + b;
     }, 0);
 };
@@ -1802,9 +1806,9 @@ TestSuiteResult.prototype.countPassed = function countPassed() {
  */
 TestSuiteResult.prototype.countSkipped = function countSkipped() {
     "use strict";
-    return this.map(function(result) {
+    return this.map(function (result) {
         return result.skipped;
-    }).reduce(function(a, b) {
+    }).reduce(function (a, b) {
         return a + b;
     }, 0);
 };
@@ -1816,9 +1820,9 @@ TestSuiteResult.prototype.countSkipped = function countSkipped() {
  */
 TestSuiteResult.prototype.countWarnings = function countWarnings() {
     "use strict";
-    return this.map(function(result) {
+    return this.map(function (result) {
         return result.warned;
-    }).reduce(function(a, b) {
+    }).reduce(function (a, b) {
         return a + b;
     }, 0);
 };
@@ -1851,7 +1855,7 @@ TestSuiteResult.prototype.isSkipped = function isSkipped() {
 TestSuiteResult.prototype.getAllFailures = function getAllFailures() {
     "use strict";
     var failures = [];
-    this.forEach(function(result) {
+    this.forEach(function (result) {
         failures = failures.concat(result.failures);
     });
     return failures;
@@ -1865,7 +1869,7 @@ TestSuiteResult.prototype.getAllFailures = function getAllFailures() {
 TestSuiteResult.prototype.getAllPasses = function getAllPasses() {
     "use strict";
     var passes = [];
-    this.forEach(function(result) {
+    this.forEach(function (result) {
         passes = passes.concat(result.passes);
     });
     return passes;
@@ -1879,7 +1883,7 @@ TestSuiteResult.prototype.getAllPasses = function getAllPasses() {
 TestSuiteResult.prototype.getAllSkips = function getAllSkips() {
     "use strict";
     var skipped = [];
-    this.forEach(function(result) {
+    this.forEach(function (result) {
         skipped = skipped.concat(result.skipped);
     });
     return skipped;
@@ -1903,7 +1907,7 @@ TestSuiteResult.prototype.getAllResults = function getAllResults() {
  */
 TestSuiteResult.prototype.calculateDuration = function calculateDuration() {
     "use strict";
-    return this.getAllResults().map(function(result) {
+    return this.getAllResults().map(function (result) {
         return ~~result.time;
     }).reduce(function add(a, b) {
         return a + b;
@@ -1926,31 +1930,32 @@ function TestCaseResult(options) {
     this.skips = [];
     this.warnings = [];
     this.config = options && options.config;
-    this.__defineGetter__("assertions", function() {
+    this.__defineGetter__("assertions", function () {
         return this.passed + this.failed;
     });
-    this.__defineGetter__("crashed", function() {
+    this.__defineGetter__("crashed", function () {
         return this.errors.length;
     });
-    this.__defineGetter__("failed", function() {
+    this.__defineGetter__("failed", function () {
         return this.failures.length;
     });
-    this.__defineGetter__("dubious", function() {
-        return this.failures.filter(function(failure) {
+    this.__defineGetter__("dubious", function () {
+        return this.failures.filter(function (failure) {
             return failure.type === "dubious";
         }).length;
     });
-    this.__defineGetter__("passed", function() {
+    this.__defineGetter__("passed", function () {
         return this.passes.length;
     });
-    this.__defineGetter__("skipped", function() {
-        return this.skips.map(function(skip) {
+    this.__defineGetter__("skipped", function () {
+        return this.skips.map(function (skip) {
             return skip.number;
-        }).reduce(function(a, b) {
+        }).reduce(function (a, b) {
             return a + b;
         }, 0);
     });
 }
+
 exports.TestCaseResult = TestCaseResult;
 
 /**
@@ -2023,13 +2028,15 @@ TestCaseResult.prototype.addWarning = function addWarning(warning) {
  */
 TestCaseResult.prototype.calculateDuration = function calculateDuration() {
     "use strict";
+
     function add(a, b) {
         return a + b;
     }
-    var passedTimes = this.passes.map(function(success) {
+
+    var passedTimes = this.passes.map(function (success) {
         return ~~success.time;
     }).reduce(add, 0);
-    var failedTimes = this.failures.map(function(failure) {
+    var failedTimes = this.failures.map(function (failure) {
         return ~~failure.time;
     }).reduce(add, 0);
     return passedTimes + failedTimes;

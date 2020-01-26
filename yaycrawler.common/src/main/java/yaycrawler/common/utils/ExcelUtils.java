@@ -23,7 +23,7 @@ public class ExcelUtils {
      * @param dataList 数据
      * @return
      */
-    public static boolean exportCsv(File file,List<Map> dataList, ServletOutputStream outputStream) {
+    public static boolean exportCsv(File file, List<Map> dataList, ServletOutputStream outputStream) {
         boolean isSucess = false;
         // 创建一个workbook 对应一个excel应用文件
         XSSFWorkbook workBook = new XSSFWorkbook();
@@ -69,6 +69,7 @@ public class ExcelUtils {
             return isSucess;
         }
     }
+
     /**
      * 导入
      *
@@ -85,10 +86,10 @@ public class ExcelUtils {
                 for (int i = 1; i < sheet.getPhysicalNumberOfRows(); i++) {
                     Map data = new HashMap();
                     XSSFRow rows = sheet.getRow(i);
-                    for (int j = 0;j<keys.getPhysicalNumberOfCells();j++) {
+                    for (int j = 0; j < keys.getPhysicalNumberOfCells(); j++) {
                         String key = keys.getCell(j).toString().replaceAll("[\\s\\u00A0]+$", "");
                         String value = rows.getCell(j).toString().replaceAll("[\\s\\u00A0]+$", "");
-                        data.put(key,value);
+                        data.put(key, value);
                     }
                     dataList.add(data);
                 }

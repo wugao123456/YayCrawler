@@ -103,7 +103,7 @@ public class RedisCrawlerQueueService implements ICrawlerQueueService {
         Map<String, String> taskDetailsMap = Maps.newHashMap();
         List<CrawlerRequest> requestTmps = Lists.newArrayList();
         for (CrawlerRequest crawlerRequest : crawlerRequests) {
-            if(crawlerRequest.getUrl() == null)
+            if (crawlerRequest.getUrl() == null)
                 continue;
             Map<String, Object> parameter = crawlerRequest.getData();
             List<Object> arrayTmps = null;
@@ -142,6 +142,7 @@ public class RedisCrawlerQueueService implements ICrawlerQueueService {
 
     /**
      * 通过迪卡尔积生成多个参数批量任务
+     *
      * @param requestTmps
      * @param crawlerRequest
      * @param datas
@@ -180,6 +181,7 @@ public class RedisCrawlerQueueService implements ICrawlerQueueService {
 
     /**
      * 通过批量参数转换成批量任务
+     *
      * @param entry
      * @param datas
      */

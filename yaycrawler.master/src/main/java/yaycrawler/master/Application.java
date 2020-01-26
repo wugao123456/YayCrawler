@@ -12,11 +12,11 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaRepositories(basePackages = {"yaycrawler.dao.repositories"})
 public class Application {
 
-	public static void main(String[] args) {
-		SpringApplication springApplication =new SpringApplication(Application.class);
+    public static void main(String[] args) {
+        SpringApplication springApplication = new SpringApplication(Application.class);
 //		springApplication.addListeners(new MasterRegisterListener());
-		springApplication.run(args);
-	}
+        springApplication.run(args);
+    }
 
 
 }

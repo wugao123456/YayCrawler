@@ -9,25 +9,25 @@
     <listeners>
         <nio-listener name="default" port="2121">
             <ssl>
-                <keystore file="ftpserver.jks" password="password" />
+                <keystore file="ftpserver.jks" password="password"/>
             </ssl>
         </nio-listener>
     </listeners>
 
     <!--<ftplets>-->
-        <!--<ftplet name="ftpService">-->
-            <!--<beans:bean class="com.ftp.service.FtpService">-->
-                <!--<beans:property name="ftpDao" ref="ftpDao"></beans:property>-->
-            <!--</beans:bean>-->
-        <!--</ftplet>-->
+    <!--<ftplet name="ftpService">-->
+    <!--<beans:bean class="com.ftp.service.FtpService">-->
+    <!--<beans:property name="ftpDao" ref="ftpDao"></beans:property>-->
+    <!--</beans:bean>-->
+    <!--</ftplet>-->
     <!--</ftplets>-->
 
-<!--    <file-user-manager file="application.properties" encrypt-passwords="salted"/>-->
+    <!--    <file-user-manager file="application.properties" encrypt-passwords="salted"/>-->
 
 
     <db-user-manager encrypt-passwords="salted">
         <data-source>
-            <beans:ref bean="dataSource" />
+            <beans:ref bean="dataSource"/>
         </data-source>
         <insert-user>INSERT INTO FTP_USER (userid, userpassword,
             homedirectory, enableflag, writepermission, idletime, uploadrate,
@@ -55,6 +55,7 @@
             userid='admin'
         </is-admin>
         <authenticate>SELECT userpassword from FTP_USER WHERE
-            userid='{userid}'</authenticate>
+            userid='{userid}'
+        </authenticate>
     </db-user-manager>
 </server>

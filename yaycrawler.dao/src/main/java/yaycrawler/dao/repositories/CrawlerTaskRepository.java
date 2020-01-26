@@ -9,6 +9,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import yaycrawler.dao.domain.CrawlerTask;
 
+import javax.transaction.Transactional;
+
 /**
  * Created by  yuananyun on 2017/3/24.
  */
@@ -57,11 +59,13 @@ public interface CrawlerTaskRepository extends PagingAndSortingRepository<Crawle
     /**
      * 刷新超时队列（把超时的运行中队列任务重新加入待执行队列）
      *
-     * @param timeout
+     * @param //timeout
      */
+    @Transactional
     @Modifying(clearAutomatically = true)
-    @Query("update CrawlerTask set status =-2 where status=2 and current_timestamp()-startedTime>:timeout")
-    void refreshBreakedQueue(@Param("timeout") long timeout);
+    @Query("update CrawlerTask set status =-2 where status=2 and current_timestamp()-startedTime>1800000")
+    void refreshBreakedQueue();
+   // void refreshBreakedQueue(@Param("timeout") long timeout);
 
 
     Page<CrawlerTask> findAllByStatus(int status, Pageable pageable);

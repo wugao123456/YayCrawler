@@ -1,9 +1,10 @@
 package yaycrawler.dao.domain;
 
-import com.sun.istack.internal.NotNull;
+
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.sql.Date;
 
 /**
@@ -29,8 +30,8 @@ public class SiteAccount {
     private String domain;
 
     @NotNull
-    @Column(name = "available",insertable = false,columnDefinition = "char default '1'")
-    private String  available;
+    @Column(name = "available", insertable = false, columnDefinition = "char default '1'")
+    private String available;
 
     public String getId() {
         return id;
@@ -47,7 +48,7 @@ public class SiteAccount {
     public void setUserName(String userName) {
         this.userName = userName;
     }
-    
+
     public String getDomain() {
         return domain;
     }

@@ -3,6 +3,7 @@ package yaycrawler.common.utils;
 /**
  * Created by shentong on 2017/4/1.
  */
+
 import com.github.stuxuhai.jpinyin.PinyinFormat;
 import com.github.stuxuhai.jpinyin.PinyinHelper;
 
@@ -429,6 +430,7 @@ public class ChineseToEnglish {
 
     /**
      * 获得单个汉字的Ascii.
+     *
      * @param cn char 汉字字符
      * @return int 错误返回 0,否则返回ascii
      */
@@ -453,15 +455,16 @@ public class ChineseToEnglish {
 
     /**
      * 根据ASCII码到SpellMap中查找对应的拼音
+     *
      * @param ascii int
-     * 字符对应的ASCII
+     *              字符对应的ASCII
      * @return String
      * 拼音,首先判断ASCII是否>0&<160,如果是返回对应的字符,
      * <BR>否则到SpellMap中查找,如果没有找到拼音,则返回null,如果找到则返回拼音.
      */
     public static String getSpellByAscii(int ascii) {
         if (ascii > 0 && ascii < 160) { //单字符
-            return String.valueOf( (char) ascii);
+            return String.valueOf((char) ascii);
         }
 
         if (ascii < -20319 || ascii > -10247) { //不知道的字符
@@ -480,12 +483,11 @@ public class ChineseToEnglish {
             spell = (String) it.next();
             Object valObj = spellMap.get(spell);
             if (valObj instanceof Integer) {
-                asciiRang = ( (Integer) valObj).intValue();
+                asciiRang = ((Integer) valObj).intValue();
 
                 if (ascii >= asciiRang0 && ascii < asciiRang) { //区间找到
                     return (spell0 == null) ? spell : spell0;
-                }
-                else {
+                } else {
                     spell0 = spell;
                     asciiRang0 = asciiRang;
                 }
@@ -498,8 +500,9 @@ public class ChineseToEnglish {
 
     /**
      * 返回字符串的全拼,是汉字转化为全拼,其它字符不进行转换
+     *
      * @param cnStr String
-     * 字符串
+     *              字符串
      * @return String
      * 转换成全拼后的字符串
      */
@@ -514,13 +517,11 @@ public class ChineseToEnglish {
             int ascii = getCnAscii(chars[i]);
             if (ascii == 0) { //取ascii时出错
                 retuBuf.append(chars[i]);
-            }
-            else {
+            } else {
                 String spell = getSpellByAscii(ascii);
                 if (spell == null) {
                     retuBuf.append(chars[i]);
-                }
-                else {
+                } else {
                     retuBuf.append(spell);
                 } // end of if spell == null
             } // end of if ascii <= -20400
@@ -531,6 +532,7 @@ public class ChineseToEnglish {
 
     /**
      * 第一个字取全拼,后面的字取首字母
+     *
      * @param cnStr
      * @return 返回转换后的拼
      */
@@ -546,17 +548,14 @@ public class ChineseToEnglish {
 
             if (ascii == 0) { //取ascii时出错
                 retuBuf.append(chars[i]);
-            }
-            else {
+            } else {
                 String spell = getSpellByAscii(ascii);
                 if (spell == null) {
                     retuBuf.append(chars[i]);
-                }
-                else {
+                } else {
                     if (i == 0) { //第一个字取全拼
                         retuBuf.append(spell);
-                    }
-                    else { //后面的字取首字母
+                    } else { //后面的字取首字母
                         retuBuf.append(spell.substring(0, 1));
                     }
                 }

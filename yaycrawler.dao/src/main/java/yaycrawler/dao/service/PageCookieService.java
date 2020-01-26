@@ -21,6 +21,7 @@ public class PageCookieService {
     @Autowired
     private SiteCookieRepository cookieRepository;
     public static final String DEMO_CACHE_NAME = "demo";
+
     @CacheEvict(value = DEMO_CACHE_NAME)
     public void deleteCookieById(String cookieId) {
         try {

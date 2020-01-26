@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 public class WorkerController {
     private static Logger logger = LoggerFactory.getLogger(WorkerController.class);
 
-//    @Autowired
+    //    @Autowired
 //    private WorkerHearbeatHandler hearbeatHandler;
     @Autowired
     private CrawlerTaskDispatcher taskDispatcher;

@@ -9,6 +9,7 @@ public interface ICacheService {
 
     /**
      * 获取或创建一个指定名称的缓存
+     *
      * @param cacheName
      * @return
      */

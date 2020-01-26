@@ -20,25 +20,25 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 基于mysql的队列服务
+ * 基于mysql的队列服务  CrawlerTask
  * Created by  yuananyun on 2017/3/24.
  */
-//@Service(value = "mysqlQueueService")
+@Service(value = "crawlerQueueService")
 //@Transactional
 public class MySqlCrawlerQueueService implements ICrawlerQueueService {
 
     @Autowired
     private CrawlerTaskRepository crawlerTaskRepository;
 
-//    待运行
+    //    待运行
     private static int STATUS_WAITING = -2;
-//    运行中
+    //    运行中
     private static int STATUS_RUNNING = -1;
-//    失败
+    //    失败
     private static int STATUS_FAILURE = 0;
-//    成功
+    //    成功
     private static int STATUS_SUCCESS = 1;
-//    超时
+    //    超时
     private static int STATUS_TIMEOUT = 2;
 
     /**
@@ -129,7 +129,8 @@ public class MySqlCrawlerQueueService implements ICrawlerQueueService {
      */
     @Override
     public void refreshBreakedQueue(Long timeout) {
-        crawlerTaskRepository.refreshBreakedQueue(timeout);
+       // crawlerTaskRepository.refreshBreakedQueue(timeout);
+        crawlerTaskRepository.refreshBreakedQueue();
     }
 
 
@@ -196,7 +197,6 @@ public class MySqlCrawlerQueueService implements ICrawlerQueueService {
         }
         return requestList;
     }
-
 
 
 }

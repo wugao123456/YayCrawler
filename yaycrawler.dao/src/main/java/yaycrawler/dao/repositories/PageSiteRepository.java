@@ -14,5 +14,6 @@ import yaycrawler.dao.domain.PageSite;
 @Repository
 public interface PageSiteRepository extends CrudRepository<PageSite, String> {
     PageSite findByDomain(String domain);
+
     Page<PageSite> findAllByOrderByDomainAsc(Pageable pageable);
 }

@@ -38,13 +38,15 @@ function create() {
     "use strict";
     return new Stack();
 }
+
 exports.create = create;
 
 /**
  * Popups container. Implements Array prototype.
  *
  */
-var Stack = function Stack(){};
+var Stack = function Stack() {
+};
 exports.Stack = Stack;
 
 Stack.prototype = [];
@@ -58,7 +60,7 @@ Stack.prototype.clean = function clean() {
     "use strict";
     var self = this;
 
-    this.forEach(function(popup, index) {
+    this.forEach(function (popup, index) {
         // window references lose the parent attribute when they are no longer valid
         if (popup.parent === null || typeof popup.parent === "undefined") {
             self.splice(index, 1);
@@ -89,7 +91,7 @@ Stack.prototype.find = function find(popupInfo) {
             break;
         case "qtruntimeobject": // WebPage
             popup = popupInfo;
-            if (!utils.isWebPage(popup) || !this.some(function(popupPage) {
+            if (!utils.isWebPage(popup) || !this.some(function (popupPage) {
                 if (popupInfo.id && popupPage.id) {
                     return popupPage.id === popup.id;
                 }
@@ -112,7 +114,7 @@ Stack.prototype.find = function find(popupInfo) {
  */
 Stack.prototype.findByRegExp = function findByRegExp(regexp) {
     "use strict";
-    var popup = this.filter(function(popupPage) {
+    var popup = this.filter(function (popupPage) {
         return regexp.test(popupPage.url);
     })[0];
     if (!popup) {
@@ -129,7 +131,7 @@ Stack.prototype.findByRegExp = function findByRegExp(regexp) {
  */
 Stack.prototype.findByURL = function findByURL(string) {
     "use strict";
-    var popup = this.filter(function(popupPage) {
+    var popup = this.filter(function (popupPage) {
         return popupPage.url.indexOf(string) !== -1;
     })[0];
     if (!popup) {
@@ -145,7 +147,7 @@ Stack.prototype.findByURL = function findByURL(string) {
  */
 Stack.prototype.list = function list() {
     "use strict";
-    return this.map(function(popup) {
+    return this.map(function (popup) {
         try {
             return popup.url;
         } catch (e) {

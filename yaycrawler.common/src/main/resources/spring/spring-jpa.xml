@@ -7,23 +7,23 @@
 
 
     <!--<jpa:repository base-package="yaycrawler.common.dao.repository"-->
-                      <!--entity-manager-factory-ref="entityManagerFactory"-->
-                      <!--transaction-manager-ref="transactionManager"/>-->
+    <!--entity-manager-factory-ref="entityManagerFactory"-->
+    <!--transaction-manager-ref="transactionManager"/>-->
 
     <!--<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">-->
-        <!--<property name="entityManagerFactory" ref="entityManagerFactory"/>-->
+    <!--<property name="entityManagerFactory" ref="entityManagerFactory"/>-->
     <!--</bean>-->
 
 
     <!--&lt;!&ndash;detailed logging information on what methods are called inside JpaRepository, e.g&ndash;&gt;-->
     <!--<bean id="customizableTraceInterceptor" class="-->
     <!--org.springframework.aop.interceptor.CustomizableTraceInterceptor">-->
-        <!--<property name="enterMessage" value="Entering $[methodName]($[arguments])"/>-->
-        <!--<property name="exitMessage" value="Leaving $[methodName](): $[returnValue]"/>-->
+    <!--<property name="enterMessage" value="Entering $[methodName]($[arguments])"/>-->
+    <!--<property name="exitMessage" value="Leaving $[methodName](): $[returnValue]"/>-->
     <!--</bean>-->
     <!--<aop:config>-->
-        <!--<aop:advisor advice-ref="customizableTraceInterceptor"-->
-                     <!--pointcut="execution(public * org.springframework.data.jpa.repository.JpaRepository+.*(..))"/>-->
+    <!--<aop:advisor advice-ref="customizableTraceInterceptor"-->
+    <!--pointcut="execution(public * org.springframework.data.jpa.repository.JpaRepository+.*(..))"/>-->
     <!--</aop:config>-->
 
 

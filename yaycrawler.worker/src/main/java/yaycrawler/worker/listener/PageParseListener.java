@@ -31,13 +31,13 @@ public class PageParseListener implements IPageParseListener {
         CrawlerResult crawlerResult = new CrawlerResult(true, DigestUtils.sha1Hex(request.getUrl()), childRequestList, null);
         if (childRequestList != null && childRequestList.size() > 0) {
             masterActor.notifyTaskSuccess(crawlerResult);
-        } else WorkerContext.completedResultMap.put(crawlerResult.getKey(),crawlerResult);
+        } else WorkerContext.completedResultMap.put(crawlerResult.getKey(), crawlerResult);
     }
 
     @Override
     public void onError(Request request, String failureInfo) {
         CrawlerResult crawlerResult = new CrawlerResult(false, DigestUtils.sha1Hex(request.getUrl()), null, failureInfo);
-        WorkerContext.completedResultMap.put(crawlerResult.getKey(),crawlerResult);
+        WorkerContext.completedResultMap.put(crawlerResult.getKey(), crawlerResult);
     }
 
     @Override

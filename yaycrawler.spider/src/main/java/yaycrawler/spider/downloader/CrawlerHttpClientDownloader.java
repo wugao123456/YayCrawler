@@ -71,7 +71,7 @@ public class CrawlerHttpClientDownloader extends AbstractDownloader {
     }
 
 
-    public Page download(Request request, Task task,String cookie) {
+    public Page download(Request request, Task task, String cookie) {
         Site site = null;
         if (task != null) {
             site = task.getSite();
@@ -86,7 +86,7 @@ public class CrawlerHttpClientDownloader extends AbstractDownloader {
         } else {
             acceptStatCode = Sets.newHashSet(200);
         }
-        if(request == null)
+        if (request == null)
             return null;
         logger.debug("downloading page {}", request.getUrl());
         CloseableHttpResponse httpResponse = null;
@@ -103,7 +103,7 @@ public class CrawlerHttpClientDownloader extends AbstractDownloader {
             if (site.getHttpProxyPool() != null && site.getHttpProxyPool().isEnable()) {
                 proxy = site.getHttpProxyFromPool();
                 proxyHost = proxy.getHttpHost();
-            } else if(site.getHttpProxy()!= null){
+            } else if (site.getHttpProxy() != null) {
                 proxyHost = site.getHttpProxy();
             }
 
@@ -119,7 +119,7 @@ public class CrawlerHttpClientDownloader extends AbstractDownloader {
                 onSuccess(request);
                 return page;
             } else {
-                logger.warn("get page {} error, status code {} ",request.getUrl(),statusCode);
+                logger.warn("get page {} error, status code {} ", request.getUrl(), statusCode);
                 if (site.getCycleRetryTimes() > 0) {
                     return addToCycleRetry(request, site);
                 }
@@ -134,7 +134,7 @@ public class CrawlerHttpClientDownloader extends AbstractDownloader {
             return null;
         } finally {
             request.putExtra(Request.STATUS_CODE, statusCode);
-            if (site.getHttpProxyPool()!=null && site.getHttpProxyPool().isEnable()) {
+            if (site.getHttpProxyPool() != null && site.getHttpProxyPool().isEnable()) {
                 site.returnHttpProxyToPool((HttpHost) request.getExtra(Request.PROXY), (Integer) request
                         .getExtra(Request.STATUS_CODE));
             }
@@ -151,7 +151,7 @@ public class CrawlerHttpClientDownloader extends AbstractDownloader {
 
     @Override
     public Page download(Request request, Task task) {
-        return download(request,task,null);
+        return download(request, task, null);
     }
 
     @Override
@@ -163,7 +163,7 @@ public class CrawlerHttpClientDownloader extends AbstractDownloader {
         return acceptStatCode.contains(statusCode);
     }
 
-    protected HttpUriRequest getHttpUriRequest(Request request, Site site, Map<String, String> headers,HttpHost proxy) {
+    protected HttpUriRequest getHttpUriRequest(Request request, Site site, Map<String, String> headers, HttpHost proxy) {
         RequestBuilder requestBuilder = selectRequestMethod(request).setUri(request.getUrl());
         if (headers != null) {
             for (Map.Entry<String, String> headerEntry : headers.entrySet()) {
@@ -175,7 +175,7 @@ public class CrawlerHttpClientDownloader extends AbstractDownloader {
                 .setSocketTimeout(site.getTimeOut())
                 .setConnectTimeout(site.getTimeOut())
                 .setCookieSpec(CookieSpecs.BEST_MATCH);
-        if (proxy !=null) {
+        if (proxy != null) {
             requestConfigBuilder.setProxy(proxy);
             request.putExtra(Request.PROXY, proxy);
         }
@@ -191,9 +191,9 @@ public class CrawlerHttpClientDownloader extends AbstractDownloader {
         } else if (method.equalsIgnoreCase(HttpConstant.Method.POST)) {
             RequestBuilder requestBuilder = RequestBuilder.post();
 
-            List<NameValuePair> parameters=new ArrayList<>();
-            Map<String,Object> paramsMap= (Map<String, Object>) request.getExtra("nameValuePair");
-            if(paramsMap!=null) {
+            List<NameValuePair> parameters = new ArrayList<>();
+            Map<String, Object> paramsMap = (Map<String, Object>) request.getExtra("nameValuePair");
+            if (paramsMap != null) {
                 for (Map.Entry<String, Object> entry : paramsMap.entrySet()) {
                     //对中文编码
                     String value = String.valueOf(entry.getValue());
@@ -239,14 +239,14 @@ public class CrawlerHttpClientDownloader extends AbstractDownloader {
                 content = new String(contentBytes, htmlCharset);
             } else {
                 logger.warn("Charset autodetect failed, use {} as charset. Please specify charset in Site.setCharset()", Charset.defaultCharset());
-                content = new String(contentBytes,"utf-8");
+                content = new String(contentBytes, "utf-8");
             }
         } else {
             content = IOUtils.toString(httpResponse.getEntity().getContent(), charset);
         }
         //unicode编码处理
         if (UNICODE_PATTERN.matcher(content).find())
-            return StringEscapeUtils.unescapeJava(content.replace("\"","\\\""));
+            return StringEscapeUtils.unescapeJava(content.replace("\"", "\\\""));
         return content;
     }
 

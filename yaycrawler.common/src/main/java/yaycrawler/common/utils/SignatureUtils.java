@@ -11,6 +11,7 @@ public class SignatureUtils {
 
     /**
      * 使用SHA1算法生成签名字符串
+     *
      * @param paramMap
      * @return
      */

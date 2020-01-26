@@ -186,6 +186,7 @@ public class QuartzScheduleService {
 
     /**
      * 恢复一个暂停的作业
+     *
      * @param jobName
      * @param jobGroup
      * @return
@@ -219,8 +220,6 @@ public class QuartzScheduleService {
             return false;
         }
     }
-
-
 
 
     private JobKey getJobKey(String jobName, String jobGroup) {

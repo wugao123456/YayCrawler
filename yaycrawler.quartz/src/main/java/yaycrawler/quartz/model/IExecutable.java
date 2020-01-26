@@ -9,8 +9,9 @@ public interface IExecutable {
 
     /**
      * 执行某个操作
-     * @return
+     *
      * @param context
+     * @return
      */
     boolean execute(JobExecutionContext context);
 }
