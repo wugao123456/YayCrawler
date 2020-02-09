@@ -34,7 +34,7 @@ public class ResourceController {
     public Object deleteCookieByIds(@RequestBody List<String> deletedIds) {
         if (deletedIds == null || deletedIds.size() == 0) return false;
             for (String deletedId : deletedIds) {
-                cookieRepository.delete(deletedId);
+                //cookieRepository.delete(deletedId);
             }
         return true;
     }

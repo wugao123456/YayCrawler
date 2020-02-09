@@ -7,7 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.annotation.ThreadSafe;
+//import org.apache.http.annotation.ThreadSafe;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -43,7 +43,7 @@ import java.util.regex.Pattern;
  * Created by ucs_yuananyun on 2016/5/23.
  * modify by bill on 2017/3/30
  */
-@ThreadSafe
+//@ThreadSafe
 public class CrawlerHttpClientDownloader extends AbstractDownloader {
     private Logger logger = LoggerFactory.getLogger(getClass());
     private static Pattern UNICODE_PATTERN = Pattern.compile("\\\\u([0-9a-fA-F]{4})");

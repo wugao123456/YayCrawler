@@ -1,7 +1,7 @@
 package yaycrawler.admin.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
+//import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashMap;
@@ -11,12 +11,13 @@ import java.util.LinkedHashMap;
  */
 @Service
 public class CrawlerResultRetrivalService {
-    @Autowired
-    private MongoTemplate mongoTemplate;
+   // @Autowired
+  //  private MongoTemplate mongoTemplate;
 
     public Object  retrivalByTaskId(String collectionName,String taskId)
     {
-        return mongoTemplate.findById(taskId, LinkedHashMap.class, collectionName);
+      //  return mongoTemplate.findById(taskId, LinkedHashMap.class, collectionName);
+        return  (Object)"";
 
     }
 

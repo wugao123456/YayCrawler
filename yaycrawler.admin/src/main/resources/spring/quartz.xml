@@ -3,12 +3,12 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean name="CrawlerQuartzScheduler"
-          class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
-        <property name="dataSource">
-            <ref bean="dataSource" />
-        </property>
-        <property name="applicationContextSchedulerContextKey" value="applicationContextKey" />
-        <property name="configLocation" value="classpath:quartz.properties" />
-    </bean>
+<!--    <bean name="CrawlerQuartzScheduler"-->
+<!--          class="org.springframework.scheduling.quartz.SchedulerFactoryBean">-->
+<!--        <property name="dataSource">-->
+<!--            <ref bean="dataSource" />-->
+<!--        </property>-->
+<!--        <property name="applicationContextSchedulerContextKey" value="applicationContextKey" />-->
+<!--        <property name="configLocation" value="classpath:quartz.properties" />-->
+<!--    </bean>-->
 </beans>

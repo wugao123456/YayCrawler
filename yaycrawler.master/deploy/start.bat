@@ -1,1 +1,1 @@
-java -jar master.war --spring.config.location=master_local.properties
+java -jar yaycrawler-master-0.0.1-SNAPSHOT.war --spring.config.location=master_local.properties

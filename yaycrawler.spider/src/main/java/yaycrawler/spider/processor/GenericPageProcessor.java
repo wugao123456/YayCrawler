@@ -30,7 +30,9 @@ import java.util.*;
 /**
  * Created by yuananyun on 2016/5/1.
  */
-@Component(value = "genericPageProcessor")
+//
+//@Component(value = "genericPageProcessor")
+@Component(value = "pageProcessor")
 public class GenericPageProcessor implements PageProcessor {
     private static Logger logger = LoggerFactory.getLogger(GenericPageProcessor.class);
     private static String DEFAULT_PAGE_SELECTOR = "page";

@@ -52,10 +52,11 @@ public class MySqlCrawlerQueueService implements ICrawlerQueueService {
     public boolean pushTasksToWaitingQueue(List<CrawlerRequest> crawlerRequests, boolean removeDuplicated) {
         boolean exists;
         for (CrawlerRequest crawlerRequest : crawlerRequests) {
-            exists = crawlerTaskRepository.exists(crawlerRequest.getHashCode());
+           // exists = crawlerTaskRepository.exists(crawlerRequest.getHashCode());
+           exists = crawlerTaskRepository.existsById(crawlerRequest.getHashCode());
             if (exists && !removeDuplicated) break;
-            if (exists)
-                crawlerTaskRepository.delete(crawlerRequest.getHashCode());
+            //if (exists)
+               // crawlerTaskRepository.delete(crawlerRequest.getHashCode());
             CrawlerTask task = CrawlerTask.convertFromCrawlerRequest(crawlerRequest);
             task.setStatus(STATUS_WAITING);
             task.setCreatedTime(new Date());
@@ -72,7 +73,7 @@ public class MySqlCrawlerQueueService implements ICrawlerQueueService {
      */
     @Override
     public List<CrawlerRequest> fetchTasksFromWaitingQueue(long taskCount) {
-        Pageable pageable = new PageRequest(0, (int) taskCount, new Sort(new Sort.Order(Sort.Direction.ASC, "createdTime")));
+        Pageable pageable =  PageRequest.of(0, (int) taskCount,  Sort.by(new Sort.Order(Sort.Direction.ASC, "createdTime")));
         Page<CrawlerTask> pageData = crawlerTaskRepository.findAllByStatus(STATUS_WAITING, pageable);
         return getCrawlerRequests(pageData.getContent());
     }
@@ -142,7 +143,7 @@ public class MySqlCrawlerQueueService implements ICrawlerQueueService {
      */
     @Override
     public QueueQueryResult queryWaitingQueues(QueueQueryParam queryParam) {
-        Pageable pageable = new PageRequest(queryParam.getPageIndex(), queryParam.getPageSize(), new Sort(new Sort.Order(Sort.Direction.ASC, "createdTime")));
+        Pageable pageable =  PageRequest.of(queryParam.getPageIndex(), queryParam.getPageSize(),  Sort.by(new Sort.Order(Sort.Direction.ASC, "createdTime")));
         Page<CrawlerTask> pageData = crawlerTaskRepository.findAllByStatus(STATUS_WAITING, pageable);
         return new QueueQueryResult(getCrawlerRequests(pageData.getContent()), pageData.getTotalPages(), pageData.getTotalElements());
     }
@@ -155,7 +156,7 @@ public class MySqlCrawlerQueueService implements ICrawlerQueueService {
      */
     @Override
     public QueueQueryResult queryRunningQueues(QueueQueryParam queryParam) {
-        Pageable pageable = new PageRequest(queryParam.getPageIndex(), queryParam.getPageSize(), new Sort(new Sort.Order(Sort.Direction.DESC, "startedTime")));
+        Pageable pageable =  PageRequest.of(queryParam.getPageIndex(), queryParam.getPageSize(),  Sort.by(new Sort.Order(Sort.Direction.DESC, "startedTime")));
         Page<CrawlerTask> pageData = crawlerTaskRepository.findAllByStatus(STATUS_RUNNING, pageable);
         return new QueueQueryResult(getCrawlerRequests(pageData.getContent()), pageData.getTotalPages(), pageData.getTotalElements());
     }
@@ -168,7 +169,7 @@ public class MySqlCrawlerQueueService implements ICrawlerQueueService {
      */
     @Override
     public QueueQueryResult queryFailQueues(QueueQueryParam queryParam) {
-        Pageable pageable = new PageRequest(queryParam.getPageIndex(), queryParam.getPageSize(), new Sort(new Sort.Order(Sort.Direction.DESC, "completedTime")));
+        Pageable pageable =  PageRequest.of(queryParam.getPageIndex(), queryParam.getPageSize(),  Sort.by(new Sort.Order(Sort.Direction.DESC, "completedTime")));
         Page<CrawlerTask> pageData = crawlerTaskRepository.findAllByStatus(STATUS_FAILURE, pageable);
         return new QueueQueryResult(getCrawlerRequests(pageData.getContent()), pageData.getTotalPages(), pageData.getTotalElements());
     }
@@ -181,7 +182,7 @@ public class MySqlCrawlerQueueService implements ICrawlerQueueService {
      */
     @Override
     public QueueQueryResult querySuccessQueues(QueueQueryParam queryParam) {
-        Pageable pageable = new PageRequest(queryParam.getPageIndex(), queryParam.getPageSize(), new Sort(new Sort.Order(Sort.Direction.DESC, "completedTime")));
+        Pageable pageable =  PageRequest.of(queryParam.getPageIndex(), queryParam.getPageSize(),  Sort.by(new Sort.Order(Sort.Direction.DESC, "completedTime")));
         Page<CrawlerTask> pageData = crawlerTaskRepository.findAllByStatus(STATUS_SUCCESS, pageable);
         return new QueueQueryResult(getCrawlerRequests(pageData.getContent()), pageData.getTotalPages(), pageData.getTotalElements());
     }

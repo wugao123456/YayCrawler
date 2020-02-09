@@ -26,7 +26,7 @@ public class PageCookieService {
     public void deleteCookieById(String cookieId) {
         try {
             if (StringUtils.isBlank(cookieId)) return;
-            cookieRepository.delete(cookieId);
+            //cookieRepository.delete(cookieId);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -52,7 +52,8 @@ public class PageCookieService {
 
     @Cacheable(value = DEMO_CACHE_NAME, keyGenerator = "wiselyKeyGenerator")
     public String getCookieValueById(String cookieId) {
-        SiteCookie siteCookie = cookieRepository.findOne(cookieId);
+        //SiteCookie siteCookie = cookieRepository.findOne(cookieId);
+       SiteCookie siteCookie = cookieRepository.findById(cookieId).get();
         return siteCookie == null ? "" : siteCookie.getCookie();
     }
 }

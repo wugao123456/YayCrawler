@@ -1,6 +1,7 @@
 package yaycrawler.admin.controller;
 
-import org.springframework.boot.autoconfigure.web.ErrorController;
+//import org.springframework.boot.autoconfigure.web.ErrorController;
+import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;
 
 /**

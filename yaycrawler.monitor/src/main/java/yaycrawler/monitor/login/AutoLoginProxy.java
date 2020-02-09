@@ -26,11 +26,11 @@ public class AutoLoginProxy {
 
     private static Logger logger = LoggerFactory.getLogger(AutoLoginProxy.class);
 
-    @Value("${server.address}")
+  // @Value("${server.address}")
     private String serverIP;
     @Value("${server.port}")
     private String serverPort;
-    @Value("${server.context-path}")
+    @Value("${server.servlet.context-path}")
     private String serverContextPath;
 
     @Autowired

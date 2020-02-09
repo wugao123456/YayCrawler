@@ -4,19 +4,14 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>yaycrawler-dao</artifactId>
     <groupId>com.yaycrawler</groupId>
-    <version>${yaycrawler.version}</version>
+    <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <parent>
         <artifactId>yaycrawler-parent</artifactId>
         <groupId>com.yaycrawler</groupId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>1.8</java.version>
-        <yaycrawler.version>1.0.0-SNAPSHOT</yaycrawler.version>
-    </properties>
 
 
     <dependencies>
@@ -46,7 +41,7 @@
         <dependency>
             <groupId>com.yaycrawler</groupId>
             <artifactId>yaycrawler-cache</artifactId>
-            <version>${yaycrawler.version}</version>
+<!--            <version>0.0.1-SNAPSHOT</version>-->
         </dependency>
     </dependencies>
 

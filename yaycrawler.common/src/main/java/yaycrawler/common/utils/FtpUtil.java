@@ -15,7 +15,8 @@ import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
 import org.apache.commons.net.io.CopyStreamEvent;
 import org.apache.commons.net.io.CopyStreamListener;
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
+import org.jboss.logging.Logger;
 import yaycrawler.common.model.FtpTransferFileVo;
 
 /**

@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by yuananyun on 2016/5/3.
+ * Created by yuananyun on 2016/5/3.配置规则
  */
 @Controller
 public class ConfigController {

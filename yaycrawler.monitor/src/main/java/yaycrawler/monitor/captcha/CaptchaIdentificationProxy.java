@@ -21,11 +21,11 @@ import java.net.URLEncoder;
 public class CaptchaIdentificationProxy {
     private static Logger logger = LoggerFactory.getLogger(CaptchaIdentificationProxy.class);
 
-    @Value("${server.address}")
+   // @Value("${server.address}")
     private String serverIP;
     @Value("${server.port}")
     private String serverPort;
-    @Value("${server.context-path}")
+    @Value("${server.servlet.context-path}")
     private String serverContextPath;
 
     @Autowired

@@ -5,7 +5,7 @@
 
     <groupId>com.yaycrawler</groupId>
     <artifactId>yaycrawler-ftpserver</artifactId>
-    <version>${yaycrawler.version}</version>
+    <version>0.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <name>yaycrawler.ftpserver</name>
@@ -14,7 +14,7 @@
     <parent>
         <artifactId>yaycrawler-parent</artifactId>
         <groupId>com.yaycrawler</groupId>
-        <version>${yaycrawler.version}</version>
+        <version>0.0.1-SNAPSHOT</version>
     </parent>
 
     <dependencies>
@@ -52,7 +52,7 @@
         <dependency>
             <groupId>com.yaycrawler</groupId>
             <artifactId>yaycrawler-common</artifactId>
-            <version>${yaycrawler.version}</version>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.ftpserver</groupId>

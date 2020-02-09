@@ -4,7 +4,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
+//import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 import yaycrawler.common.utils.UrlUtils;
 import yaycrawler.spider.persistent.IResultPersistentService;
@@ -19,7 +19,7 @@ import java.util.Map;
 public class MongDBPersistentService implements IResultPersistentService {
     private static Logger logger = LoggerFactory.getLogger(MongDBPersistentService.class);
     @Autowired
-    private MongoTemplate mongoTemplate;
+   // private MongoTemplate mongoTemplate;
 
     @Override
 
@@ -30,7 +30,7 @@ public class MongDBPersistentService implements IResultPersistentService {
             data.put("_id", _id);
             data.put("timestamp", System.currentTimeMillis());
             String collectionName = UrlUtils.getDomain(pageUrl).replace(".", "_");
-            mongoTemplate.save(data, collectionName);
+           // mongoTemplate.save(data, collectionName);
             return true;
         } catch (Exception ex) {
             logger.error(ex.getMessage());

@@ -7,6 +7,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import yaycrawler.dao.domain.*;
@@ -54,18 +55,18 @@ public class PageParserRuleService {
     }
 
     public Page<PageSite> querySites(int pageIndex, int pageSize) {
-        return siteRepository.findAllByOrderByDomainAsc(new PageRequest(pageIndex, pageSize));
+        return siteRepository.findAllByOrderByDomainAsc( PageRequest.of(pageIndex, pageSize));
     }
 
     public Page<SiteAccount> queryAccounts(int pageIndex, int pageSize) {
-        return accountRepository.findAll(new PageRequest(pageIndex, pageSize));
+        return accountRepository.findAll( PageRequest.of(pageIndex, pageSize));
     }
 
     @CacheEvict(value = DEMO_CACHE_NAME)
     public boolean deleteSiteByIds(List<String> deleteIds) {
         for (String deleteId : deleteIds) {
             //先删除cookies
-            siteRepository.delete(deleteId);
+            //siteRepository.delete(deleteId);
         }
         return true;
     }
@@ -74,7 +75,7 @@ public class PageParserRuleService {
     public boolean deleteAccountByIds(List<String> deleteIds) {
         for (String deleteId : deleteIds) {
             //先删除cookies
-            accountRepository.delete(deleteId);
+          //  accountRepository.delete(deleteId);
         }
         return true;
     }
@@ -95,8 +96,10 @@ public class PageParserRuleService {
     }
 
     public Page<PageInfo> queryPageInfos(int pageIndex, int pageSize) {
-        return pageInfoRepository.findAllByOrderByCreatedDateDesc(new PageRequest(pageIndex, pageSize));
-    }
+        //var pageable=PageRequest.of(pageIndex, pageSize);
+        return pageInfoRepository.findAllByOrderByCreatedDateDesc(PageRequest.of(pageIndex, pageSize));
+        //return   pageInfoRepository.findAllByOrderByCreatedDateDesc()
+}
 
     @CacheEvict(value = DEMO_CACHE_NAME)
     public boolean savePageInfo(PageInfo pageInfo) {
@@ -105,7 +108,8 @@ public class PageParserRuleService {
     }
 
     public PageInfo getPageInfoById(String pageId) {
-        return pageInfoRepository.findOne(pageId);
+      //  return pageInfoRepository.findOne(pageId);
+        return pageInfoRepository.findById(pageId).get();
     }
 
     @CacheEvict(value = DEMO_CACHE_NAME)
@@ -118,7 +122,7 @@ public class PageParserRuleService {
     public boolean deletePageInfoByIds(List<String> deleteIds) {
         if (deleteIds == null || deleteIds.size() == 0) return true;
         for (String deleteId : deleteIds) {
-            pageInfoRepository.delete(deleteId);
+          //  pageInfoRepository.delete(deleteId);
         }
         return true;
     }
@@ -130,14 +134,15 @@ public class PageParserRuleService {
 
     @Cacheable(value = DEMO_CACHE_NAME)
     public PageParseRegion getPageRegionById(String regionId) {
-        return regionRepository.findOne(regionId);
+        return regionRepository.findById(regionId).get();
+       // return regionRepository.findOne(regionId);
     }
 
     @CacheEvict(value = DEMO_CACHE_NAME)
     public Object deletePageRegionByIds(List<String> deleteIds) {
         if (deleteIds == null || deleteIds.size() == 0) return true;
         for (String deleteId : deleteIds) {
-            regionRepository.delete(deleteId);
+           // regionRepository.delete(deleteId);
         }
         return true;
     }
@@ -152,7 +157,7 @@ public class PageParserRuleService {
     public Object deleteFieldRuleByIds(List<String> deleteIds) {
         if (deleteIds == null || deleteIds.size() == 0) return true;
         for (String deleteId : deleteIds) {
-            fieldParseRuleRepository.delete(deleteId);
+           // fieldParseRuleRepository.delete(deleteId);
         }
         return true;
     }
@@ -167,14 +172,15 @@ public class PageParserRuleService {
     public Object deleteUrlRuleByIds(List<String> deleteIds) {
         if (deleteIds == null || deleteIds.size() == 0) return true;
         for (String deleteId : deleteIds) {
-            urlParseRuleRepository.delete(deleteId);
+            //urlParseRuleRepository.delete(deleteId);
         }
         return true;
     }
 
     @Cacheable(value = DEMO_CACHE_NAME, keyGenerator = "wiselyKeyGenerator")
     public UrlParseRule getUrlParseRuleById(String urlRuleId) {
-        return urlParseRuleRepository.findOne(urlRuleId);
+        //return urlParseRuleRepository.findOne(urlRuleId);
+        return urlParseRuleRepository.findByRegionId(urlRuleId).get(0);
     }
 
     @CacheEvict(value = DEMO_CACHE_NAME)
@@ -187,7 +193,7 @@ public class PageParserRuleService {
     public Object deleteUrlRuleParamByIds(List<String> deleteIds) {
         if (deleteIds == null || deleteIds.size() == 0) return true;
         for (String deleteId : deleteIds) {
-            ruleParamRepository.delete(deleteId);
+           // ruleParamRepository.delete(deleteId);
         }
         return true;
     }

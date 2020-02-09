@@ -35,13 +35,13 @@ import java.util.Map;
 @Component
 public class DocumentPersistentService implements IResultPersistentService {
 
-    @Value("${ftp.server.url}")
+   // @Value("${ftp.server.url}")
     private String url;
-    @Value("${ftp.server.port}")
+   // @Value("${ftp.server.port}")
     private int port;
-    @Value("${ftp.server.username}")
+   // @Value("${ftp.server.username}")
     private String username;
-    @Value("${ftp.server.password}")
+   // @Value("${ftp.server.password}")
     private String password;
 
     @Value("${ftp.server.path}")
